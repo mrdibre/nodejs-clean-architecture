@@ -39,5 +39,8 @@
   },
   "scripts": {
     "test": "jest"
+  },
+  "dependencies": {
+    "ts-node": "^9.1.1"
   }
 }
