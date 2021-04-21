@@ -4,9 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
     "prepare": "husky install",
-    "test:staged": "jest"
+    "test": "jest --pass-WithNoTests",
+    "test:staged": "jest --pass-WithNoTests"
   },
   "prettier": {
     "singleQuote": false,
