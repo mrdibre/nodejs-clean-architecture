@@ -19,5 +19,6 @@ module.exports = {
     quotes: ["error", "double", { avoidEscape: true }],
     complexity: ["error", 4],
     "prettier/prettier": "error",
+    "@typescript-eslint/no-explicit-any": "off",
   },
 };
