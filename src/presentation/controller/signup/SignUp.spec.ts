@@ -1,7 +1,19 @@
 import { SignUpController } from "./SignUp";
 import { MissingParamError } from "../../errors/missing-param-error";
+import { InvalidParamError } from "../../errors/invalid-param-error";
+import { EmailValidator } from "../../protocols/email-validator";
 
-const makeSut = () => new SignUpController();
+const makeSut = () => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid(email) {
+      return true;
+    }
+  }
+
+  const emailValidatorStub = new EmailValidatorStub();
+
+  return new SignUpController(emailValidatorStub);
+};
 
 describe("SignUp Controller", () => {
   test("Should return 400 if no name is provided", () => {
@@ -72,5 +84,23 @@ describe("SignUp Controller", () => {
     expect(httpResponse.body).toEqual(
       new MissingParamError("passwordConfirmation"),
     );
+  });
+
+  test("Should return 400 if an invalid email is provided", () => {
+    const sut = makeSut();
+
+    const httpRequest = {
+      body: {
+        name: "César",
+        email: "invalid_email",
+        password: "123",
+        passwordConfirmation: "123",
+      },
+    };
+
+    const httpResponse = sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+    expect(httpResponse.body).toEqual(new InvalidParamError("email"));
   });
 });
