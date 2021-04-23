@@ -17,7 +17,6 @@ module.exports = {
   plugins: ["@typescript-eslint", "prettier"],
   rules: {
     quotes: ["error", "double", { avoidEscape: true }],
-    complexity: ["error", 4],
     "prettier/prettier": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
