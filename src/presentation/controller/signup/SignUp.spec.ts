@@ -1,8 +1,10 @@
 import { SignUpController } from "./SignUp";
-import { ServerError } from "../../errors/server-error";
 import { EmailValidator } from "../../protocols/email-validator";
-import { MissingParamError } from "../../errors/missing-param-error";
-import { InvalidParamError } from "../../errors/invalid-param-error";
+import {
+  ServerError,
+  MissingParamError,
+  InvalidParamError,
+} from "../../errors";
 
 const makeSut = () => {
   class EmailValidatorStub implements EmailValidator {
@@ -133,6 +135,7 @@ describe("SignUp Controller", () => {
 
   test("Should return 500 if EmailValidator throws", () => {
     class EmailValidatorStub implements EmailValidator {
+      // @ts-ignore
       isValid(email) {
         throw new Error("");
       }
@@ -140,6 +143,7 @@ describe("SignUp Controller", () => {
 
     const emailValidatorStub = new EmailValidatorStub();
 
+    // @ts-ignore
     const sut = new SignUpController(emailValidatorStub);
 
     const httpRequest = {
