@@ -6,14 +6,18 @@ import {
   InvalidParamError,
 } from "../../errors";
 
-const makeSut = () => {
+const makeEmailValidator = () => {
   class EmailValidatorStub implements EmailValidator {
     isValid(email) {
       return true;
     }
   }
 
-  const emailValidatorStub = new EmailValidatorStub();
+  return new EmailValidatorStub();
+};
+
+const makeSut = () => {
+  const emailValidatorStub = makeEmailValidator();
 
   const sut = new SignUpController(emailValidatorStub);
 
@@ -134,14 +138,11 @@ describe("SignUp Controller", () => {
   });
 
   test("Should return 500 if EmailValidator throws", () => {
-    class EmailValidatorStub implements EmailValidator {
-      // @ts-ignore
-      isValid(email) {
-        throw new Error("");
-      }
-    }
+    const emailValidatorStub = makeEmailValidator();
 
-    const emailValidatorStub = new EmailValidatorStub();
+    jest.spyOn(emailValidatorStub, "isValid").mockImplementationOnce(() => {
+      throw new ServerError();
+    });
 
     // @ts-ignore
     const sut = new SignUpController(emailValidatorStub);
