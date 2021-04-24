@@ -206,6 +206,30 @@ describe("SignUp Controller", () => {
     expect(httpResponse.body).toEqual(new ServerError());
   });
 
+  test("Should return 500 if AddAccount throws", () => {
+    const { emailValidatorStub, addAccountStub } = makeSut();
+
+    jest.spyOn(addAccountStub, "add").mockImplementationOnce(() => {
+      throw new ServerError();
+    });
+
+    const sut = new SignUpController(emailValidatorStub, addAccountStub);
+
+    const httpRequest = {
+      body: {
+        name: "César",
+        email: "invalid_email",
+        password: "123",
+        passwordConfirmation: "123",
+      },
+    };
+
+    const httpResponse = sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(500);
+    expect(httpResponse.body).toEqual(new ServerError());
+  });
+
   test("Should call AddAccount with correct values", () => {
     const { sut, addAccountStub } = makeSut();
 
@@ -226,6 +250,30 @@ describe("SignUp Controller", () => {
       name: "César",
       email: "email@gmail.com",
       password: "123",
+    });
+  });
+
+  test("Should return 200 if valid data is provided", () => {
+    const { sut } = makeSut();
+
+    const httpRequest = {
+      body: {
+        name: "valid_name",
+        email: "valid_email",
+        password: "valid_password",
+        passwordConfirmation: "valid_password",
+      },
+    };
+
+    const httpResponse = sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(200);
+
+    expect(httpResponse.body).toEqual({
+      id: "1",
+      name: "valid_name",
+      email: "valid_email",
+      password: "valid_password",
     });
   });
 });
