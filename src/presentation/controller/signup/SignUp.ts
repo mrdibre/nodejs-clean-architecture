@@ -9,7 +9,7 @@ class SignUpController implements Controller {
     private readonly addAccount: AddAccount,
   ) {}
 
-  handle(httpRequest) {
+  async handle(httpRequest) {
     try {
       const requiredFields = [
         "name",
@@ -36,7 +36,7 @@ class SignUpController implements Controller {
         return badRequest(new InvalidParamError("email"));
       }
 
-      const account = this.addAccount.add({
+      const account = await this.addAccount.add({
         name,
         email,
         password,
