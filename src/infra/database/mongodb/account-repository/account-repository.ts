@@ -9,12 +9,7 @@ class AccountMongoRepository implements AddAccountRepository {
 
     const { ops } = await accountCollection.insertOne(accountData);
 
-    const { _id, ...account } = ops[0];
-
-    return {
-      id: _id,
-      ...account,
-    };
+    return MongoHelper.mapModelToId(ops[0]);
   }
 }
 

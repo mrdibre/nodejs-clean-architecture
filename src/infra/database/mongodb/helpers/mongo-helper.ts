@@ -14,6 +14,14 @@ const MongoHelper = {
   async getCollection(name: string): Promise<Collection<any>> {
     return this.client.db().collection(name);
   },
+  mapModelToId(accountData: any): any {
+    const { _id, ...account } = accountData;
+
+    return {
+      id: _id,
+      ...account,
+    };
+  },
 };
 
 export { MongoHelper };
