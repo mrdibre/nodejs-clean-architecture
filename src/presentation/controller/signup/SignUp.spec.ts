@@ -1,11 +1,20 @@
 import { SignUpController } from "./SignUp";
-import { EmailValidator } from "../../protocols";
+import { EmailValidator, HttpRequest } from "../../protocols";
 import {
   ServerError,
   MissingParamError,
   InvalidParamError,
 } from "../../errors";
 import { AddAccount } from "../../../domain/usecases/account/add-account";
+
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    name: "any_name",
+    email: "any@email.com",
+    password: "any_password",
+    passwordConfirmation: "any_password",
+  },
+});
 
 const makeEmailValidator = () => {
   class EmailValidatorStub implements EmailValidator {
@@ -22,9 +31,9 @@ const makeAddAccount = () => {
     async add(account) {
       const fakeAccount = {
         id: "1",
-        name: "valid_name",
-        email: "valid_email",
-        password: "valid_password",
+        name: "any_name",
+        email: "any@email.com",
+        password: "any_password",
       };
 
       return Promise.resolve(fakeAccount);
@@ -53,9 +62,9 @@ describe("SignUp Controller", () => {
 
     const httpRequest = {
       body: {
-        email: "cesar@gmail.com",
-        password: "123",
-        passwordConfirmation: "123",
+        email: "valid@email.com",
+        password: "any_password",
+        passwordConfirmation: "any_password",
       },
     };
 
@@ -70,9 +79,9 @@ describe("SignUp Controller", () => {
 
     const httpRequest = {
       body: {
-        name: "César",
-        password: "123",
-        passwordConfirmation: "123",
+        name: "any_name",
+        password: "any_password",
+        passwordConfirmation: "any_password",
       },
     };
 
@@ -87,9 +96,9 @@ describe("SignUp Controller", () => {
 
     const httpRequest = {
       body: {
-        name: "César",
-        email: "cesar@gmail.com",
-        passwordConfirmation: "123",
+        name: "any_name",
+        email: "valid@email.com",
+        passwordConfirmation: "any_password",
       },
     };
 
@@ -104,9 +113,9 @@ describe("SignUp Controller", () => {
 
     const httpRequest = {
       body: {
-        name: "César",
-        email: "cesar@gmail.com",
-        password: "123",
+        name: "any_name",
+        email: "valid@email.com",
+        password: "any_password",
       },
     };
 
@@ -123,10 +132,10 @@ describe("SignUp Controller", () => {
 
     const httpRequest = {
       body: {
-        name: "César",
-        email: "cesar@gmail.com",
-        password: "123",
-        passwordConfirmation: "1234",
+        name: "any_name",
+        email: "valid@email.com",
+        password: "any_password",
+        passwordConfirmation: "any_password4",
       },
     };
 
@@ -143,16 +152,7 @@ describe("SignUp Controller", () => {
 
     jest.spyOn(emailValidatorStub, "isValid").mockReturnValueOnce(false);
 
-    const httpRequest = {
-      body: {
-        name: "César",
-        email: "invalid_email",
-        password: "123",
-        passwordConfirmation: "123",
-      },
-    };
-
-    const httpResponse = await sut.handle(httpRequest);
+    const httpResponse = await sut.handle(makeFakeRequest());
 
     expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(new InvalidParamError("email"));
@@ -163,18 +163,9 @@ describe("SignUp Controller", () => {
 
     const isValidSpy = jest.spyOn(emailValidatorStub, "isValid");
 
-    const httpRequest = {
-      body: {
-        name: "César",
-        email: "email@gmail.com",
-        password: "123",
-        passwordConfirmation: "123",
-      },
-    };
+    await sut.handle(makeFakeRequest());
 
-    await sut.handle(httpRequest);
-
-    expect(isValidSpy).toHaveBeenCalledWith("email@gmail.com");
+    expect(isValidSpy).toHaveBeenCalledWith("any@email.com");
   });
 
   test("Should return 500 if EmailValidator throws", async () => {
@@ -187,16 +178,7 @@ describe("SignUp Controller", () => {
     // @ts-ignore
     const sut = new SignUpController(emailValidatorStub);
 
-    const httpRequest = {
-      body: {
-        name: "César",
-        email: "invalid_email",
-        password: "123",
-        passwordConfirmation: "123",
-      },
-    };
-
-    const httpResponse = await sut.handle(httpRequest);
+    const httpResponse = await sut.handle(makeFakeRequest());
 
     expect(httpResponse.statusCode).toBe(500);
     expect(httpResponse.body).toEqual(new ServerError());
@@ -211,16 +193,7 @@ describe("SignUp Controller", () => {
 
     const sut = new SignUpController(emailValidatorStub, addAccountStub);
 
-    const httpRequest = {
-      body: {
-        name: "César",
-        email: "invalid_email",
-        password: "123",
-        passwordConfirmation: "123",
-      },
-    };
-
-    const httpResponse = await sut.handle(httpRequest);
+    const httpResponse = await sut.handle(makeFakeRequest());
 
     expect(httpResponse.statusCode).toBe(500);
     expect(httpResponse.body).toEqual(new ServerError());
@@ -231,45 +204,29 @@ describe("SignUp Controller", () => {
 
     const addSpy = jest.spyOn(addAccountStub, "add");
 
-    const httpRequest = {
-      body: {
-        name: "César",
-        email: "email@gmail.com",
-        password: "123",
-        passwordConfirmation: "123",
-      },
-    };
-
-    await sut.handle(httpRequest);
+    await sut.handle(makeFakeRequest());
 
     expect(addSpy).toHaveBeenCalledWith({
-      name: "César",
-      email: "email@gmail.com",
-      password: "123",
+      name: "any_name",
+      email: "any@email.com",
+      password: "any_password",
     });
   });
 
   test("Should return 200 if valid data is provided", async () => {
     const { sut } = makeSut();
 
-    const httpRequest = {
-      body: {
-        name: "valid_name",
-        email: "valid_email",
-        password: "valid_password",
-        passwordConfirmation: "valid_password",
-      },
-    };
+    const request = makeFakeRequest();
 
-    const httpResponse = await sut.handle(httpRequest);
+    const httpResponse = await sut.handle(request);
 
     expect(httpResponse.statusCode).toBe(200);
 
     expect(httpResponse.body).toEqual({
       id: "1",
-      name: "valid_name",
-      email: "valid_email",
-      password: "valid_password",
+      name: request.body.name,
+      email: request.body.email,
+      password: request.body.password,
     });
   });
 });
