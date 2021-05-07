@@ -4,7 +4,7 @@ import { useMiddlewares } from "./middlewares";
 
 const app = express();
 
-useRoutes(app);
 useMiddlewares(app);
+useRoutes(app);
 
 export { app };

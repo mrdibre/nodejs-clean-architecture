@@ -1,10 +1,11 @@
 import request from "supertest";
+import Env from "../../env";
 import { app } from "../../app";
 import { MongoHelper } from "../../../../infra/database/mongodb/helpers/mongo-helper";
 
 describe("SignUp Routes", () => {
   beforeAll(async () => {
-    await MongoHelper.connect(process.env.MONGO_URL);
+    await MongoHelper.connect(Env.mongoUrl);
   });
 
   afterAll(async () => {
