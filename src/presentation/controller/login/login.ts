@@ -11,11 +11,14 @@ class LoginController implements Controller {
   constructor(private readonly emailValidator: EmailValidator) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    if (!httpRequest.body.email) {
+    const { email, password } = httpRequest.body;
+
+    if (!email) {
       return badRequest(new MissingParamError("email"));
-    } else if (!httpRequest.body.password) {
+    } else if (!password) {
       return badRequest(new MissingParamError("password"));
-    } else if (!this.emailValidator.isValid(httpRequest.body.email)) {
+    }
+    if (!this.emailValidator.isValid(email)) {
       return badRequest(new InvalidParamError("email"));
     }
   }
