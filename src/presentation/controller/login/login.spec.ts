@@ -7,7 +7,7 @@ import {
 } from "../../helpers/http/http-helper";
 import { MissingParamError } from "../../errors";
 import { Authentication } from "../../../domain/usecases/authentication/authentication";
-import { Validation } from "../../helpers/validators/validation";
+import { Validation } from "../../protocols/validation";
 
 const makeFakeRequest = () => ({
   body: {
