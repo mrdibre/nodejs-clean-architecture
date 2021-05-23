@@ -7,6 +7,7 @@ import {
 } from "../../errors";
 import { AddAccount } from "../../../domain/usecases/account/add-account";
 import { Validation } from "../../helpers/validators/validation";
+import { badRequest, ok } from "../../helpers/http-helper";
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -243,12 +244,14 @@ describe("SignUp Controller", () => {
 
     expect(httpResponse.statusCode).toBe(200);
 
-    expect(httpResponse.body).toEqual({
-      id: "1",
-      name: request.body.name,
-      email: request.body.email,
-      password: request.body.password,
-    });
+    expect(httpResponse).toEqual(
+      ok({
+        id: "1",
+        name: request.body.name,
+        email: request.body.email,
+        password: request.body.password,
+      }),
+    );
   });
 
   test("Should call Validation with correct value", async () => {
@@ -261,5 +264,21 @@ describe("SignUp Controller", () => {
     await sut.handle(httpRequest);
 
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
+  });
+
+  test("Should return 400 if Validation returns an error", async () => {
+    const { sut, validationStub } = makeSut();
+
+    jest
+      .spyOn(validationStub, "validate")
+      .mockReturnValueOnce(new MissingParamError("any_field"));
+
+    const request = makeFakeRequest();
+
+    const httpResponse = await sut.handle(request);
+
+    expect(httpResponse).toEqual(
+      badRequest(new MissingParamError("any_field")),
+    );
   });
 });
