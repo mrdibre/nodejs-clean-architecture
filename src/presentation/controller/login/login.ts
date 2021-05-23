@@ -1,12 +1,12 @@
 import { Controller, HttpRequest, HttpResponse } from "../../protocols";
+import { Validation } from "../../protocols/validation";
+import { Authentication } from "../../../domain/usecases/authentication/authentication";
 import {
-  badRequest,
   ok,
+  badRequest,
   serverError,
   unauthorized,
 } from "../../helpers/http/http-helper";
-import { Validation } from "../../protocols/validation";
-import { Authentication } from "../../../domain/usecases/authentication/authentication";
 
 class LoginController implements Controller {
   constructor(
@@ -24,7 +24,7 @@ class LoginController implements Controller {
 
       const { email, password } = httpRequest.body;
 
-      const token = await this.authentication.auth(email, password);
+      const token = await this.authentication.auth({ email, password });
 
       if (!token) {
         return unauthorized();

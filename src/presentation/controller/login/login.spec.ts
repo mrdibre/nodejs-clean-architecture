@@ -1,13 +1,16 @@
 import { LoginController } from "./login";
+import { MissingParamError } from "../../errors";
+import { Validation } from "../../protocols/validation";
 import {
-  badRequest,
+  Authentication,
+  AuthenticationModel,
+} from "../../../domain/usecases/authentication/authentication";
+import {
   ok,
+  badRequest,
   serverError,
   unauthorized,
 } from "../../helpers/http/http-helper";
-import { MissingParamError } from "../../errors";
-import { Authentication } from "../../../domain/usecases/authentication/authentication";
-import { Validation } from "../../protocols/validation";
 
 const makeFakeRequest = () => ({
   body: {
@@ -18,7 +21,7 @@ const makeFakeRequest = () => ({
 
 const makeAuthentication = () => {
   class AuthenticationStub implements Authentication {
-    async auth(email: string, password: string): Promise<string> {
+    async auth(authentication: AuthenticationModel): Promise<string> {
       return "any_token";
     }
   }
@@ -59,10 +62,10 @@ describe("Login Controller", () => {
 
     await sut.handle(httpRequest);
 
-    expect(authSpy).toHaveBeenCalledWith(
-      httpRequest.body.email,
-      httpRequest.body.password,
-    );
+    expect(authSpy).toHaveBeenCalledWith({
+      email: httpRequest.body.email,
+      password: httpRequest.body.password,
+    });
   });
 
   test("Should return 401 if an invalid credentials are provided", async () => {
