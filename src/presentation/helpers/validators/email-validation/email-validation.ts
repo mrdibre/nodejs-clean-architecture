@@ -1,6 +1,6 @@
-import { Validation } from "./validation";
-import { InvalidParamError } from "../../errors";
-import { EmailValidator } from "../../protocols";
+import { Validation } from "../validation";
+import { InvalidParamError } from "../../../errors";
+import { EmailValidator } from "../../../protocols";
 
 class EmailValidation implements Validation {
   constructor(
