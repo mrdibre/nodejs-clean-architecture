@@ -4,7 +4,12 @@ import {
   HttpRequest,
   HttpResponse,
 } from "../../protocols";
-import { badRequest, ok, serverError } from "../../helpers/http-helper";
+import {
+  badRequest,
+  ok,
+  serverError,
+  unauthorized,
+} from "../../helpers/http-helper";
 import { InvalidParamError, MissingParamError } from "../../errors";
 import { Authentication } from "../../../domain/usecases/authentication/authentication";
 
@@ -31,6 +36,10 @@ class LoginController implements Controller {
       }
 
       const token = await this.authentication.auth(email, password);
+
+      if (!token) {
+        return unauthorized();
+      }
 
       return ok({ token });
     } catch (e) {
