@@ -3,7 +3,7 @@ import { HttpRequest } from "../../protocols";
 import { ServerError, MissingParamError } from "../../errors";
 import { AddAccount } from "../../../domain/usecases/account/add-account";
 import { Validation } from "../../helpers/validators/validation";
-import { badRequest, ok } from "../../helpers/http-helper";
+import { badRequest, ok } from "../../helpers/http/http-helper";
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {

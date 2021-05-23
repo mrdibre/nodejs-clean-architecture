@@ -4,7 +4,7 @@ import {
   ok,
   serverError,
   unauthorized,
-} from "../../helpers/http-helper";
+} from "../../helpers/http/http-helper";
 import { MissingParamError } from "../../errors";
 import { Authentication } from "../../../domain/usecases/authentication/authentication";
 import { Validation } from "../../helpers/validators/validation";
