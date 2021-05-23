@@ -6,6 +6,7 @@ import {
   InvalidParamError,
 } from "../../errors";
 import { AddAccount } from "../../../domain/usecases/account/add-account";
+import { Validation } from "../../helpers/validators/validation";
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -43,14 +44,30 @@ const makeAddAccount = () => {
   return new AddAccountStub();
 };
 
+const makeValidation = () => {
+  class ValidationSub implements Validation {
+    validate(input: any) {
+      return null;
+    }
+  }
+
+  return new ValidationSub();
+};
+
 const makeSut = () => {
   const emailValidatorStub = makeEmailValidator();
   const addAccountStub = makeAddAccount();
+  const validationStub = makeValidation();
 
-  const sut = new SignUpController(emailValidatorStub, addAccountStub);
+  const sut = new SignUpController(
+    emailValidatorStub,
+    addAccountStub,
+    validationStub,
+  );
 
   return {
     sut,
+    validationStub,
     addAccountStub,
     emailValidatorStub,
   };
@@ -185,13 +202,17 @@ describe("SignUp Controller", () => {
   });
 
   test("Should return 500 if AddAccount throws", async () => {
-    const { emailValidatorStub, addAccountStub } = makeSut();
+    const { emailValidatorStub, addAccountStub, validationStub } = makeSut();
 
     jest.spyOn(addAccountStub, "add").mockImplementationOnce(() => {
       throw new ServerError();
     });
 
-    const sut = new SignUpController(emailValidatorStub, addAccountStub);
+    const sut = new SignUpController(
+      emailValidatorStub,
+      addAccountStub,
+      validationStub,
+    );
 
     const httpResponse = await sut.handle(makeFakeRequest());
 
@@ -228,5 +249,17 @@ describe("SignUp Controller", () => {
       email: request.body.email,
       password: request.body.password,
     });
+  });
+
+  test("Should call Validation with correct value", async () => {
+    const { sut, validationStub } = makeSut();
+
+    const validateSpy = jest.spyOn(validationStub, "validate");
+
+    const httpRequest = makeFakeRequest();
+
+    await sut.handle(httpRequest);
+
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
   });
 });
