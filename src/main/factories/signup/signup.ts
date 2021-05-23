@@ -5,6 +5,9 @@ import { DbAddAccount } from "../../../data/usecases/add-account/db-add-account/
 import { EmailValidatorAdapter } from "../../../utils/email-validator-adapter/email-validator-adapter";
 import { AccountMongoRepository } from "../../../infra/database/mongodb/account-repository/account-repository";
 import { LogMongoRepository } from "../../../infra/database/mongodb/log-repository/LogMongoRepository";
+import { ValidationComposite } from "../../../presentation/helpers/validators/validation-composite";
+import { RequiredFieldValidation } from "../../../presentation/helpers/validators/require-field-validation";
+import { makeSignUpValidation } from "./signup-validation";
 
 const makeSignUpController = () => {
   const emailValidator = new EmailValidatorAdapter();
@@ -12,7 +15,12 @@ const makeSignUpController = () => {
   const bcryptAdapter = new BcryptAdapter(12);
   const addRepository = new AccountMongoRepository();
   const dbAddAccount = new DbAddAccount(bcryptAdapter, addRepository);
-  const signUpController = new SignUpController(emailValidator, dbAddAccount);
+
+  const signUpController = new SignUpController(
+    emailValidator,
+    dbAddAccount,
+    makeSignUpValidation(),
+  );
 
   const logRepository = new LogMongoRepository();
 
