@@ -5,8 +5,6 @@ import { DbAddAccount } from "../../../data/usecases/add-account/db-add-account/
 import { EmailValidatorAdapter } from "../../../utils/email-validator-adapter/email-validator-adapter";
 import { AccountMongoRepository } from "../../../infra/database/mongodb/account-repository/account-repository";
 import { LogMongoRepository } from "../../../infra/database/mongodb/log-repository/LogMongoRepository";
-import { ValidationComposite } from "../../../presentation/helpers/validators/validation-composite";
-import { RequiredFieldValidation } from "../../../presentation/helpers/validators/require-field-validation";
 import { makeSignUpValidation } from "./signup-validation";
 
 const makeSignUpController = () => {
