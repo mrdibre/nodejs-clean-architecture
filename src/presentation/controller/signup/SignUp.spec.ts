@@ -75,26 +75,6 @@ const makeSut = () => {
 };
 
 describe("SignUp Controller", () => {
-  test("Should return 400 if password confirmation failed", async () => {
-    const { sut } = makeSut();
-
-    const httpRequest = {
-      body: {
-        name: "any_name",
-        email: "valid@email.com",
-        password: "any_password",
-        passwordConfirmation: "any_password4",
-      },
-    };
-
-    const httpResponse = await sut.handle(httpRequest);
-
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(
-      new InvalidParamError("passwordConfirmation"),
-    );
-  });
-
   test("Should return 400 if an invalid email is provided", async () => {
     const { sut, emailValidatorStub } = makeSut();
 
