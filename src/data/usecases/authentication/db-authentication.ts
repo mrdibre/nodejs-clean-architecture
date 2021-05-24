@@ -5,12 +5,14 @@ import {
   Authentication,
   AuthenticationModel,
 } from "../../../domain/usecases/authentication/authentication";
+import { UpdateAccessTokenRepository } from "../../protocols/database/update-access-token-repository";
 
 class DbAuthentication implements Authentication {
   constructor(
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly hashComparer: HashComparer,
     private readonly tokenGenerator: TokenGenerator,
+    private readonly updateAccessTokenRepository: UpdateAccessTokenRepository,
   ) {}
 
   async auth(authentication: AuthenticationModel): Promise<string> {
@@ -25,7 +27,11 @@ class DbAuthentication implements Authentication {
       );
 
       if (isEquals) {
-        return this.tokenGenerator.generate(account.id);
+        const token = await this.tokenGenerator.generate(account.id);
+
+        await this.updateAccessTokenRepository.update(account.id, token);
+
+        return token;
       }
     }
 
