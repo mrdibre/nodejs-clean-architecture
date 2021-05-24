@@ -1,6 +1,6 @@
-import { Encrypter } from "../../../protocols/encrypter";
+import { Encrypter } from "../../../protocols/criptography/encrypter";
 import { AccountModel } from "../../../../domain/models/account";
-import { AddAccountRepository } from "../../../protocols/add-account-repository";
+import { AddAccountRepository } from "../../../protocols/database/add-account-repository";
 import {
   AddAccount,
   AddAccountModel,
