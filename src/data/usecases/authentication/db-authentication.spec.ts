@@ -1,11 +1,12 @@
 import { AccountModel } from "../../../domain/models/account";
 import { LoadAccountByEmailRepository } from "../../protocols/database/load-account-by-email-repository";
 import { DbAuthentication } from "./db-authentication";
+import { HashComparer } from "../../protocols/criptography/hash-comparer";
 
 const makeFakeAccount = () => ({
   id: "any_id",
   name: "any_name",
-  password: "any_password",
+  password: "hashed_password",
   email: "any_email@mail.com",
 });
 
@@ -25,12 +26,28 @@ const makeLoadAccount = () => {
   return new LoadAccountByEmailRepositoryStub();
 };
 
+const makeHashComparer = () => {
+  class HashComparerStub implements HashComparer {
+    async compare(value: string, hash: string): Promise<boolean> {
+      return true;
+    }
+  }
+
+  return new HashComparerStub();
+};
+
 const makeSut = () => {
+  const hashCompareStub = makeHashComparer();
   const loadAccountByEmailRepository = makeLoadAccount();
-  const sut = new DbAuthentication(loadAccountByEmailRepository);
+
+  const sut = new DbAuthentication(
+    loadAccountByEmailRepository,
+    hashCompareStub,
+  );
 
   return {
     sut,
+    hashCompareStub,
     loadAccountByEmailRepository,
   };
 };
@@ -58,13 +75,13 @@ describe("DbAuthentication UseCase", () => {
     await expect(promise).rejects.toThrow();
   });
 
-  test("Should return null if LoadAccountByEmailRepository returns null", async () => {
-    const { sut, loadAccountByEmailRepository } = makeSut();
+  test("Should call HashComparer with correct values", async () => {
+    const { sut, hashCompareStub } = makeSut();
 
-    jest.spyOn(loadAccountByEmailRepository, "load").mockReturnValueOnce(null);
+    const compareSpy = jest.spyOn(hashCompareStub, "compare");
 
-    const accessToken = await sut.auth(makeFakeAuthentication());
+    await sut.auth(makeFakeAuthentication());
 
-    expect(accessToken).toBeNull();
+    expect(compareSpy).toHaveBeenCalledWith("any_password", "hashed_password");
   });
 });
