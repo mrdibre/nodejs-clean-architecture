@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { adaptExpressRoute } from "../../../adapters/adapt-express-route";
+import { adaptExpressRoute } from "../../../adapters/express/adapt-express-route";
 import { makeSignUpController } from "../../../factories/signup/signup";
 
 const registerRoute = (router: Router) => {

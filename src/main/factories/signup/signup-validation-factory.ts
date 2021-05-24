@@ -1,5 +1,5 @@
 import { Validation } from "../../../presentation/protocols/validation";
-import { EmailValidatorAdapter } from "../../../utils/email-validator-adapter/email-validator-adapter";
+import { EmailValidatorAdapter } from "../../adapters/validators/email-validator/email-validator-adapter";
 import {
   EmailValidation,
   ValidationComposite,
