@@ -2,7 +2,7 @@ import { DbAuthentication } from "./db-authentication";
 import { AccountModel } from "../../../domain/models/account";
 import {
   HashComparer,
-  TokenGenerator,
+  Encrypter,
   UpdateAccessTokenRepository,
   LoadAccountByEmailRepository,
 } from "../../protocols";
@@ -41,8 +41,8 @@ const makeHashComparer = () => {
 };
 
 const makeTokenGenerator = () => {
-  class TokenGeneratorStub implements TokenGenerator {
-    async generate(id: string): Promise<string> {
+  class TokenGeneratorStub implements Encrypter {
+    async encrypt(id: string): Promise<string> {
       return "any_token";
     }
   }
@@ -139,21 +139,21 @@ describe("DbAuthentication UseCase", () => {
     expect(token).toBeNull();
   });
 
-  test("Should call TokenGenerator with correct values", async () => {
+  test("Should call Encrypter with correct values", async () => {
     const { sut, tokenGeneratorStub } = makeSut();
 
-    const generatorSpy = jest.spyOn(tokenGeneratorStub, "generate");
+    const generatorSpy = jest.spyOn(tokenGeneratorStub, "encrypt");
 
     await sut.auth(makeFakeAuthentication());
 
     expect(generatorSpy).toHaveBeenCalledWith("any_id");
   });
 
-  test("Should throw if TokenGenerator throws", async () => {
+  test("Should throw if Encrypter throws", async () => {
     const { sut, tokenGeneratorStub } = makeSut();
 
     jest
-      .spyOn(tokenGeneratorStub, "generate")
+      .spyOn(tokenGeneratorStub, "encrypt")
       .mockReturnValueOnce(new Promise((_, reject) => reject(new Error())));
 
     const promise = sut.auth(makeFakeAuthentication());
@@ -161,7 +161,7 @@ describe("DbAuthentication UseCase", () => {
     await expect(promise).rejects.toThrow();
   });
 
-  test("Should call TokenGenerator with correct id", async () => {
+  test("Should call Encrypter with correct id", async () => {
     const { sut } = makeSut();
 
     const accessToken = await sut.auth(makeFakeAuthentication());
