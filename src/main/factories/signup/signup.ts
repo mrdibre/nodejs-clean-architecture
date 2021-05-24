@@ -1,10 +1,10 @@
-import { LogControllerDecorator } from "../../decorators/log/log";
-import { SignUpController } from "../../../presentation/controller/signup/SignUp";
+import { LogControllerDecorator } from "../../decorators/log/log-controller-decorator";
+import { SignUpController } from "../../../presentation/controller/signup/signup-controller";
 import { BcryptAdapter } from "../../../infra/criptography/bcrypt-adapter/bcrypt-adapter";
 import { DbAddAccount } from "../../../data/usecases/add-account/db-add-account/db-add-account";
 import { AccountMongoRepository } from "../../../infra/database/mongodb/account-repository/account-repository";
 import { LogMongoRepository } from "../../../infra/database/mongodb/log-repository/LogMongoRepository";
-import { makeSignUpValidation } from "./signup-validation";
+import { makeSignUpValidation } from "./signup-validation-factory";
 
 const makeSignUpController = () => {
   const bcryptAdapter = new BcryptAdapter(12);

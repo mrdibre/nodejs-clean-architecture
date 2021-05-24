@@ -1,4 +1,4 @@
-import { SignUpController } from "./SignUp";
+import { SignUpController } from "./signup-controller";
 import { HttpRequest } from "../../protocols";
 import { ServerError, MissingParamError } from "../../errors";
 import { AddAccount } from "../../../domain/usecases/account/add-account";
