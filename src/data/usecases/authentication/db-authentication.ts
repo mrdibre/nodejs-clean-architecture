@@ -1,4 +1,5 @@
 import { HashComparer } from "../../protocols/criptography/hash-comparer";
+import { TokenGenerator } from "../../protocols/criptography/token-generator";
 import { LoadAccountByEmailRepository } from "../../protocols/database/load-account-by-email-repository";
 import {
   Authentication,
@@ -9,21 +10,22 @@ class DbAuthentication implements Authentication {
   constructor(
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly hashComparer: HashComparer,
+    private readonly tokenGenerator: TokenGenerator,
   ) {}
 
   async auth(authentication: AuthenticationModel): Promise<string> {
-    const user = await this.loadAccountByEmailRepository.load(
+    const account = await this.loadAccountByEmailRepository.load(
       authentication.email,
     );
 
-    if (user) {
+    if (account) {
       const isEquals = await this.hashComparer.compare(
         authentication.password,
-        user.password,
+        account.password,
       );
 
       if (isEquals) {
-        return "any_token";
+        return this.tokenGenerator.generate(account.id);
       }
     }
 
