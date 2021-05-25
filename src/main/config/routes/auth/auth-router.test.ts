@@ -1,7 +1,11 @@
+import { hash } from "bcrypt";
 import request from "supertest";
+import { Collection } from "mongodb";
 import Env from "../../env";
 import { app } from "../../app";
 import { MongoHelper } from "../../../../infra/database/mongodb/helpers/mongo-helper";
+
+let accountCollection: Collection;
 
 describe("Auth Routes", () => {
   beforeAll(async () => {
@@ -13,7 +17,7 @@ describe("Auth Routes", () => {
   });
 
   beforeEach(async () => {
-    const accountCollection = await MongoHelper.getCollection("account");
+    accountCollection = await MongoHelper.getCollection("account");
 
     await accountCollection.deleteMany({});
   });
@@ -27,6 +31,26 @@ describe("Auth Routes", () => {
           email: "cesar.felp982@gmail.com",
           password: "123",
           passwordConfirmation: "123",
+        })
+        .expect(200);
+    });
+  });
+
+  describe("POST /login", () => {
+    test("Should return 200 on login", async () => {
+      const password = await hash("123", 12);
+
+      await accountCollection.insertOne({
+        name: "César",
+        email: "cesar.felp982@gmail.com",
+        password,
+      });
+
+      await request(app)
+        .post("/api/login")
+        .send({
+          email: "cesar.felp982@gmail.com",
+          password: "123",
         })
         .expect(200);
     });

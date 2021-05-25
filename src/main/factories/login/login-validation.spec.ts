@@ -26,7 +26,7 @@ describe("SignUpValidation Factory", () => {
 
     const validations = [];
 
-    for (const field of ["name", "email"]) {
+    for (const field of ["password", "email"]) {
       validations.push(new RequiredFieldValidation(field));
     }
 
