@@ -10,6 +10,7 @@
     "build": "rimraf dist && tsc",
     "test": "jest --passWithNoTests",
     "start": "node dist/main/server.js",
+    "debug": "node --inspect=0.0.0.0:9222 --nolazy dist/main/server.js",
     "dev": "sucrase-node src/main/server.ts",
     "test:unit": "yarn test --watch -c jest-unit-config.js",
     "test:integration": "yarn test --watch -c jest-integration-config.js",
