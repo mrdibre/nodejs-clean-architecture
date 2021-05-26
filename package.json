@@ -5,17 +5,17 @@
   "license": "MIT",
   "scripts": {
     "husky": "husky install",
-    "up": "yarn build && docker-compose up --build -d",
+    "up": "yarn build && docker-compose up -d",
     "down": "docker-compose down",
     "build": "rimraf dist && tsc",
-    "test": "jest --passWithNoTests",
-    "start": "node dist/main/server.js",
-    "debug": "node --inspect=0.0.0.0:9222 --nolazy dist/main/server.js",
     "dev": "sucrase-node src/main/server.ts",
-    "test:unit": "yarn test --watch -c jest-unit-config.js",
-    "test:integration": "yarn test --watch -c jest-integration-config.js",
+    "start": "nodemon -L --watch ./dist ./dist/main/server.js",
+    "debug": "node --inspect=0.0.0.0:9222 --nolazy dist/main/server.js",
+    "test": "jest --passWithNoTests",
     "test:ci": "yarn test --coverage",
-    "test:staged": "yarn test --findRelatedTests"
+    "test:staged": "yarn test --findRelatedTests",
+    "test:unit": "yarn test --watch -c jest-unit-config.js",
+    "test:integration": "yarn test --watch -c jest-integration-config.js"
   },
   "prettier": {
     "singleQuote": false,
@@ -29,6 +29,7 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.6",
+    "nodemon": "^2.0.7",
     "validator": "^13.6.0"
   },
   "devDependencies": {
