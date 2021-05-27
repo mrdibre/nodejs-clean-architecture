@@ -3,7 +3,11 @@ import { HttpRequest } from "../../protocols";
 import { ServerError, MissingParamError } from "../../errors";
 import { AddAccount } from "../../../domain/usecases/account/add-account";
 import { Validation } from "../../protocols/validation";
-import { badRequest, ok } from "../../helpers/http/http-helper";
+import { badRequest, ok, serverError } from "../../helpers/http/http-helper";
+import {
+  Authentication,
+  AuthenticationModel,
+} from "../../../domain/usecases/authentication/authentication";
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -41,28 +45,63 @@ const makeValidation = () => {
   return new ValidationSub();
 };
 
+const makeAuthentication = () => {
+  class AuthenticationStub implements Authentication {
+    async auth(authentication: AuthenticationModel): Promise<string> {
+      return "any_token";
+    }
+  }
+
+  return new AuthenticationStub();
+};
+
 const makeSut = () => {
   const addAccountStub = makeAddAccount();
   const validationStub = makeValidation();
+  const authenticationStub = makeAuthentication();
 
-  const sut = new SignUpController(addAccountStub, validationStub);
+  const sut = new SignUpController(
+    addAccountStub,
+    validationStub,
+    authenticationStub,
+  );
 
   return {
     sut,
     validationStub,
     addAccountStub,
+    authenticationStub,
   };
 };
 
 describe("SignUp Controller", () => {
+  test("Should call Authentication with correct values", async () => {
+    const { sut, authenticationStub } = makeSut();
+
+    const authSpy = jest.spyOn(authenticationStub, "auth");
+
+    const httpRequest = makeFakeRequest();
+
+    await sut.handle(httpRequest);
+
+    expect(authSpy).toHaveBeenCalledWith({
+      email: httpRequest.body.email,
+      password: httpRequest.body.password,
+    });
+  });
+
   test("Should return 500 if AddAccount throws", async () => {
-    const { addAccountStub, validationStub } = makeSut();
+    const { addAccountStub, validationStub, authenticationStub } = makeSut();
 
     jest.spyOn(addAccountStub, "add").mockImplementationOnce(() => {
       throw new ServerError();
     });
 
-    const sut = new SignUpController(addAccountStub, validationStub);
+    const sut = new SignUpController(
+      addAccountStub,
+      validationStub,
+      authenticationStub,
+    );
 
     const httpResponse = await sut.handle(makeFakeRequest());
 
@@ -93,26 +132,7 @@ describe("SignUp Controller", () => {
 
     expect(httpResponse.statusCode).toBe(200);
 
-    expect(httpResponse).toEqual(
-      ok({
-        id: "1",
-        name: request.body.name,
-        email: request.body.email,
-        password: request.body.password,
-      }),
-    );
-  });
-
-  test("Should call Validation with correct value", async () => {
-    const { sut, validationStub } = makeSut();
-
-    const validateSpy = jest.spyOn(validationStub, "validate");
-
-    const httpRequest = makeFakeRequest();
-
-    await sut.handle(httpRequest);
-
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
+    expect(httpResponse).toEqual(ok({ token: "any_token" }));
   });
 
   test("Should return 400 if Validation returns an error", async () => {
@@ -129,5 +149,31 @@ describe("SignUp Controller", () => {
     expect(httpResponse).toEqual(
       badRequest(new MissingParamError("any_field")),
     );
+  });
+
+  test("Should call Validation with correct value", async () => {
+    const { sut, validationStub } = makeSut();
+
+    const validateSpy = jest.spyOn(validationStub, "validate");
+
+    const httpRequest = makeFakeRequest();
+
+    await sut.handle(httpRequest);
+
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
+  });
+
+  test("Should return 500 if Authentication throws", async () => {
+    const { sut, authenticationStub } = makeSut();
+
+    jest
+      .spyOn(authenticationStub, "auth")
+      .mockReturnValueOnce(new Promise((_, reject) => reject(new Error())));
+
+    const httpRequest = makeFakeRequest();
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });

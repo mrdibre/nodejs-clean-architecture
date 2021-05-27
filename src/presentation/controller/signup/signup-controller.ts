@@ -1,12 +1,14 @@
 import { Controller } from "../../protocols";
-import { badRequest, ok, serverError } from "../../helpers/http/http-helper";
-import { AddAccount } from "../../../domain/usecases/account/add-account";
 import { Validation } from "../../protocols/validation";
+import { AddAccount } from "../../../domain/usecases/account/add-account";
+import { badRequest, ok, serverError } from "../../helpers/http/http-helper";
+import { Authentication } from "../../../domain/usecases/authentication/authentication";
 
 class SignUpController implements Controller {
   constructor(
     private readonly addAccount: AddAccount,
     private readonly validation: Validation,
+    private readonly authentication: Authentication,
   ) {}
 
   async handle(httpRequest) {
@@ -19,13 +21,15 @@ class SignUpController implements Controller {
 
       const { name, email, password } = httpRequest.body;
 
-      const account = await this.addAccount.add({
+      await this.addAccount.add({
         name,
         email,
         password,
       });
 
-      return ok(account);
+      const token = await this.authentication.auth({ email, password });
+
+      return ok({ token });
     } catch (e) {
       return serverError(e);
     }
