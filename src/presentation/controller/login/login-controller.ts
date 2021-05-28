@@ -1,5 +1,9 @@
-import { Controller, HttpRequest, HttpResponse } from "../../protocols";
-import { Validation } from "../../protocols/validation";
+import {
+  Validation,
+  Controller,
+  HttpRequest,
+  HttpResponse,
+} from "../../protocols";
 import { Authentication } from "../../../domain/usecases/authentication/authentication";
 import {
   ok,

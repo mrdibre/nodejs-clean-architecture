@@ -1,4 +1,4 @@
-import { Validation } from "../../../protocols/validation";
+import { Validation } from "../../protocols";
 
 class ValidationComposite implements Validation {
   constructor(private readonly validations: Validation[]) {}

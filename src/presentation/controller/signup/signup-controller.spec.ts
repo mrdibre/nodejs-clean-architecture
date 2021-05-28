@@ -2,7 +2,7 @@ import { SignUpController } from "./signup-controller";
 import { HttpRequest } from "../../protocols";
 import { ServerError, MissingParamError, EmailInUseError } from "../../errors";
 import { AddAccount } from "../../../domain/usecases/account/add-account";
-import { Validation } from "../../protocols/validation";
+import { Validation } from "../../../validation/protocols/validation";
 import {
   badRequest,
   forbidden,

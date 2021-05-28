@@ -1,5 +1,5 @@
 import { Controller } from "../../protocols";
-import { Validation } from "../../protocols/validation";
+import { Validation } from "../../../validation/protocols";
 import { AddAccount } from "../../../domain/usecases/account/add-account";
 import {
   badRequest,
