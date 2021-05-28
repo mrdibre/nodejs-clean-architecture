@@ -23,6 +23,10 @@ class DbAddAccount implements AddAccount {
       accountData.email,
     );
 
+    if (alreadyExists) {
+      return null;
+    }
+
     const account = await this.addAccountRepository.add({
       ...accountData,
       password: hashedPassword,
