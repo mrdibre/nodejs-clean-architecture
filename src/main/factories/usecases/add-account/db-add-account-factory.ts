@@ -6,7 +6,7 @@ const makeDbAddAccountFactory = () => {
   const bcryptAdapter = new BcryptAdapter(12);
   const addRepository = new AccountMongoRepository();
 
-  return new DbAddAccount(bcryptAdapter, addRepository);
+  return new DbAddAccount(bcryptAdapter, addRepository, addRepository);
 };
 
 export { makeDbAddAccountFactory };
