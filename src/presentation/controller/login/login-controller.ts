@@ -26,8 +26,6 @@ class LoginController implements Controller {
 
       const token = await this.authentication.auth({ email, password });
 
-      console.log(token);
-
       if (!token) {
         return unauthorized();
       }
