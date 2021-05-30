@@ -3,14 +3,14 @@ import {
   Controller,
   HttpRequest,
   HttpResponse,
-} from "../../protocols";
-import { Authentication } from "../../../domain/usecases/authentication/authentication";
+} from "../../../protocols";
+import { Authentication } from "../../../../domain/usecases/authentication/authentication";
 import {
   ok,
   badRequest,
   serverError,
   unauthorized,
-} from "../../helpers/http/http-helper";
+} from "../../../helpers/http/http-helper";
 
 class LoginController implements Controller {
   constructor(
