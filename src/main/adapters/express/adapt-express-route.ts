@@ -7,7 +7,7 @@ const adaptExpressRoute = (controller: Controller) => {
 
     const httpResponse = await controller.handle(httpRequest);
 
-    if (httpResponse.statusCode === 200) {
+    if ([200, 204].includes(httpResponse.statusCode)) {
       return res.status(httpResponse.statusCode).json(httpResponse.body);
     }
 
