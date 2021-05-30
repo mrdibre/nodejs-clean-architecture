@@ -4,7 +4,11 @@ import {
   HttpRequest,
   HttpResponse,
 } from "../../../protocols";
-import { badRequest, serverError } from "../../../helpers/http/http-helper";
+import {
+  badRequest,
+  noContent,
+  serverError,
+} from "../../../helpers/http/http-helper";
 import { AddSurvey } from "../../../../domain/usecases/survey/add-survey";
 
 class AddSurveyController implements Controller {
@@ -26,7 +30,8 @@ class AddSurveyController implements Controller {
         question,
         answers,
       });
-      return null;
+
+      return noContent();
     } catch (e) {
       return serverError(e);
     }
