@@ -99,7 +99,7 @@ describe("SignUp Controller", () => {
     });
   });
 
-  test("Should return 500 if AddAccount throws", async () => {
+  test("Should return 500 if AddSurvey throws", async () => {
     const { addAccountStub, validationStub, authenticationStub } = makeSut();
 
     jest.spyOn(addAccountStub, "add").mockImplementationOnce(() => {
@@ -118,7 +118,7 @@ describe("SignUp Controller", () => {
     expect(httpResponse.body).toEqual(new ServerError());
   });
 
-  test("Should call AddAccount with correct values", async () => {
+  test("Should call AddSurvey with correct values", async () => {
     const { sut, addAccountStub } = makeSut();
 
     const addSpy = jest.spyOn(addAccountStub, "add");
@@ -144,7 +144,7 @@ describe("SignUp Controller", () => {
     expect(httpResponse).toEqual(ok({ token: "any_token" }));
   });
 
-  test("Should return 403 if AddAccount returns null", async () => {
+  test("Should return 403 if AddSurvey returns null", async () => {
     const { sut, addAccountStub } = makeSut();
 
     jest

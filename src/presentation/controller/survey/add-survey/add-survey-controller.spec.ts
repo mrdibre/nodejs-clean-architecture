@@ -3,6 +3,10 @@ import { MissingParamError } from "../../../errors";
 import { AddSurveyController } from "./add-survey-controller";
 import { Validation } from "../../../../validation/protocols";
 import { badRequest } from "../../../helpers/http/http-helper";
+import {
+  AddSurvey,
+  AddSurveyModel,
+} from "../../../../domain/usecases/survey/add-survey";
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -26,12 +30,24 @@ const makeValidation = () => {
   return new ValidationSub();
 };
 
+const makeAddSurvey = () => {
+  class AddSurveyStub implements AddSurvey {
+    async add(data: AddSurveyModel) {
+      return;
+    }
+  }
+
+  return new AddSurveyStub();
+};
+
 const makeSut = () => {
   const validationStub = makeValidation();
-  const sut = new AddSurveyController(validationStub);
+  const addSurveyStub = makeAddSurvey();
+  const sut = new AddSurveyController(validationStub, addSurveyStub);
 
   return {
     sut,
+    addSurveyStub,
     validationStub,
   };
 };
@@ -63,5 +79,17 @@ describe("AddSurvey Controller", function () {
     expect(httpResponse).toEqual(
       badRequest(new MissingParamError("any_field")),
     );
+  });
+
+  test("Should call AddSurvey with correct values", async () => {
+    const { sut, addSurveyStub } = makeSut();
+
+    const addSpy = jest.spyOn(addSurveyStub, "add");
+
+    const httpRequest = makeFakeRequest();
+
+    await sut.handle(httpRequest);
+
+    expect(addSpy).toHaveBeenCalledWith(httpRequest.body);
   });
 });
