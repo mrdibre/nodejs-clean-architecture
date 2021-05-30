@@ -6,7 +6,7 @@ import {
   EmailInUseError,
 } from "../../../errors";
 import { AddAccount } from "../../../../domain/usecases/account/add-account";
-import { Validation } from "../../../../validation/protocols/validation";
+import { Validation } from "../../../../validation/protocols";
 import {
   badRequest,
   forbidden,

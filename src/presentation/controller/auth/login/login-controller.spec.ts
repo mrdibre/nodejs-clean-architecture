@@ -1,6 +1,6 @@
 import { LoginController } from "./login-controller";
 import { MissingParamError } from "../../../errors";
-import { Validation } from "../../../../validation/protocols/validation";
+import { Validation } from "../../../../validation/protocols";
 import {
   Authentication,
   AuthenticationModel,
