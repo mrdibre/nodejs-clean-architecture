@@ -23,26 +23,38 @@ const makeAddSurveyRepositoryStub = () => {
 };
 
 const makeSut = () => {
-  const addSurveyRepository = makeAddSurveyRepositoryStub();
+  const addSurveyRepositoryStub = makeAddSurveyRepositoryStub();
 
-  const sut = new DbAddSurvey(addSurveyRepository);
+  const sut = new DbAddSurvey(addSurveyRepositoryStub);
 
   return {
     sut,
-    addSurveyRepository,
+    addSurveyRepositoryStub,
   };
 };
 
 describe("DbAddSurvey UseCase", () => {
   test("Should call AddSurveyRepository with correct values", async () => {
-    const { sut, addSurveyRepository } = makeSut();
+    const { sut, addSurveyRepositoryStub } = makeSut();
 
-    const addSpy = jest.spyOn(addSurveyRepository, "add");
+    const addSpy = jest.spyOn(addSurveyRepositoryStub, "add");
 
     const surveyData = makeFakeSurveyModel();
 
     await sut.add(surveyData);
 
     expect(addSpy).toHaveBeenCalledWith(surveyData);
+  });
+
+  test("Should throw if AddSurveyRepository throws", async () => {
+    const { sut, addSurveyRepositoryStub } = makeSut();
+
+    jest
+      .spyOn(addSurveyRepositoryStub, "add")
+      .mockReturnValueOnce(Promise.reject(new Error()));
+
+    const promise = sut.add(makeFakeSurveyModel());
+
+    await expect(promise).rejects.toThrow();
   });
 });
