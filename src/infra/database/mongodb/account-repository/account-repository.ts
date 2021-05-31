@@ -6,11 +6,13 @@ import {
   UpdateAccessTokenRepository,
   LoadAccountByEmailRepository,
 } from "../../../../data/protocols";
+import { LoadAccountByTokenRepository } from "../../../../data/protocols/database/account/load-account-by-token-repository";
 
 class AccountMongoRepository
   implements
     AddAccountRepository,
     LoadAccountByEmailRepository,
+    LoadAccountByTokenRepository,
     UpdateAccessTokenRepository {
   async add(accountData: AddAccountModel): Promise<AccountModel> {
     const accountCollection = await MongoHelper.getCollection("accounts");
@@ -23,6 +25,13 @@ class AccountMongoRepository
   async loadByEmail(email: string): Promise<AccountModel> {
     const accountCollection = await MongoHelper.getCollection("accounts");
     const account = await accountCollection.findOne({ email });
+
+    return account ? MongoHelper.mapModelToId(account) : null;
+  }
+
+  async loadByToken(token: string, role?: string): Promise<AccountModel> {
+    const accountCollection = await MongoHelper.getCollection("accounts");
+    const account = await accountCollection.findOne({ token, role });
 
     return account ? MongoHelper.mapModelToId(account) : null;
   }
