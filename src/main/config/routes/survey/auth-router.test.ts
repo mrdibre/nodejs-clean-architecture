@@ -3,8 +3,11 @@ import { Collection } from "mongodb";
 import Env from "../../env";
 import { app } from "../../app";
 import { MongoHelper } from "../../../../infra/database/mongodb/helpers/mongo-helper";
+import { hash } from "bcrypt";
+import { sign } from "jsonwebtoken";
 
 let surveyCollection: Collection;
+let accountCollection: Collection;
 
 describe("Survey Routes", () => {
   beforeAll(async () => {
@@ -17,12 +20,14 @@ describe("Survey Routes", () => {
 
   beforeEach(async () => {
     surveyCollection = await MongoHelper.getCollection("surveys");
+    accountCollection = await MongoHelper.getCollection("accounts");
 
     await surveyCollection.deleteMany({});
+    await accountCollection.deleteMany({});
   });
 
   describe("POST /survey", () => {
-    test("Should return 204 on add survey without accessToken", async () => {
+    test("Should return 403 on add survey without accessToken", async () => {
       await request(app)
         .post("/api/survey")
         .send({
@@ -38,6 +43,39 @@ describe("Survey Routes", () => {
           ],
         })
         .expect(403);
+    });
+
+    test("Should return 204 on add survey with valid accessToken", async () => {
+      const password = await hash("123", 12);
+
+      const { ops } = await accountCollection.insertOne({
+        name: "César",
+        role: "admin",
+        email: "cesar.felp982@gmail.com",
+        password,
+      });
+      const id = ops[0]._id;
+
+      const token = sign({ id }, Env.jwtSecret);
+
+      await accountCollection.updateOne({ _id: id }, { $set: { token } });
+
+      await request(app)
+        .post("/api/survey")
+        .set("x-access-token", token)
+        .send({
+          question: "any_question",
+          answers: [
+            {
+              image: "http://image-name.com",
+              answer: "Answer 1",
+            },
+            {
+              answer: "Answer 2",
+            },
+          ],
+        })
+        .expect(204);
     });
   });
 });
