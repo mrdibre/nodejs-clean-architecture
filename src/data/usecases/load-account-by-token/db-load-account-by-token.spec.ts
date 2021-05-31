@@ -13,16 +13,18 @@ const makeDecrypter = () => {
   return new DecrypterStub();
 };
 
+const makeFakeAccount = () => ({
+  id: "any_token",
+  name: "any_name",
+  email: "any_email",
+  password: "any_password",
+});
+
 const makeLoadAccountByTokenRepository = () => {
   class LoadAccountByTokenRepositoryStub
     implements LoadAccountByTokenRepository {
     async loadByToken(value: string, role?: string): Promise<AccountModel> {
-      return {
-        id: "any_token",
-        name: "any_name",
-        email: "any_email",
-        password: "any_password",
-      };
+      return makeFakeAccount();
     }
   }
 
@@ -88,5 +90,13 @@ describe("DbLoadAccountByToken Usecase", () => {
     const account = await sut.load("any_token", "any_role");
 
     expect(account).toBeNull();
+  });
+
+  test("Should return an account on success", async () => {
+    const { sut } = makeSut();
+
+    const account = await sut.load("any_token", "any_role");
+
+    expect(account).toEqual(makeFakeAccount());
   });
 });
