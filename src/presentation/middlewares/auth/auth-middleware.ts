@@ -1,6 +1,6 @@
 import { Middleware } from "../../protocols/middleware";
 import { HttpRequest, HttpResponse } from "../../protocols";
-import { forbidden } from "../../helpers/http/http-helper";
+import { forbidden, ok } from "../../helpers/http/http-helper";
 import { AccessDeniedError } from "../../errors";
 import { LoadAccountByToken } from "../../../domain/usecases/account/load-account-by-token";
 
@@ -11,7 +11,11 @@ class AuthMiddleware implements Middleware {
     const token = httpRequest.headers?.["x-access-token"];
 
     if (token) {
-      await this.loadAccountByToken.load(token);
+      const account = await this.loadAccountByToken.load(token);
+
+      if (account) {
+        return ok({ accountId: account.id });
+      }
     }
 
     return forbidden(new AccessDeniedError());
