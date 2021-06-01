@@ -1,4 +1,3 @@
-import { hash } from "bcrypt";
 import request from "supertest";
 import { Collection } from "mongodb";
 import Env from "../../env";
