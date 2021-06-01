@@ -15,7 +15,8 @@
     "test:ci": "yarn test --coverage",
     "test:staged": "yarn test --findRelatedTests",
     "test:unit": "yarn test --watch -c jest-unit-config.js",
-    "test:integration": "yarn test --watch -c jest-integration-config.js"
+    "test:integration": "yarn test --watch -c jest-integration-config.js",
+    "test:coveralls": "yarn test:ci && coveralls < coverage/lcov.info"
   },
   "prettier": {
     "singleQuote": false,
@@ -44,6 +45,7 @@
     "@types/validator": "^13.1.3",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
+    "coveralls": "^3.1.0",
     "eslint": "^7.24.0",
     "eslint-config-prettier": "^8.2.0",
     "eslint-plugin-prettier": "^3.4.0",
