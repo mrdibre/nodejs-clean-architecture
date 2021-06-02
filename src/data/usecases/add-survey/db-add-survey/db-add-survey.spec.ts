@@ -34,7 +34,7 @@ const makeSut = () => {
   };
 };
 
-describe("DbAddSurvey UseCase", () => {
+describe("DbLoadSurveys UseCase", () => {
   test("Should call AddSurveyRepository with correct values", async () => {
     const { sut, addSurveyRepositoryStub } = makeSut();
 
