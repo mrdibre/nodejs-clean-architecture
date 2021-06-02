@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { adaptExpressRoute } from "../../../adapters/express/adapt-express-route";
-import { makeSignUpController } from "../../../factories/controllers/auth/signup/signup-factory";
-import { makeLoginController } from "../../../factories/controllers/auth/login/login-factory";
+import { adaptExpressRoute } from "@/main/adapters/express/adapt-express-route";
+import { makeSignUpController } from "@/main/factories/controllers/auth/signup/signup-factory";
+import { makeLoginController } from "@/main/factories/controllers/auth/login/login-factory";
 
 const registerAuthRoutes = (router: Router) => {
   router.post("/signup", adaptExpressRoute(makeSignUpController()));

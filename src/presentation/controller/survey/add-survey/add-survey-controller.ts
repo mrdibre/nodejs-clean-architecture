@@ -1,15 +1,15 @@
+import { AddSurvey } from "@/domain/usecases/survey/add-survey";
 import {
   Validation,
   Controller,
   HttpRequest,
   HttpResponse,
-} from "../../../protocols";
+} from "@/presentation/protocols";
 import {
   badRequest,
   noContent,
   serverError,
-} from "../../../helpers/http/http-helper";
-import { AddSurvey } from "../../../../domain/usecases/survey/add-survey";
+} from "@/presentation/helpers/http/http-helper";
 
 class AddSurveyController implements Controller {
   constructor(

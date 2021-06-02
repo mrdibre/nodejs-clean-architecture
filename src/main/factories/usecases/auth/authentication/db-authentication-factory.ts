@@ -1,8 +1,8 @@
-import Env from "../../../../config/env";
-import { JwtAdapter } from "../../../../../infra/criptography/jwt-adapter/jwt-adapter";
-import { BcryptAdapter } from "../../../../../infra/criptography/bcrypt-adapter/bcrypt-adapter";
-import { DbAuthentication } from "../../../../../data/usecases/authentication/db-authentication";
-import { AccountMongoRepository } from "../../../../../infra/database/mongodb/account-repository/account-repository";
+import Env from "@/main/config/env";
+import { JwtAdapter } from "@/infra/criptography/jwt-adapter/jwt-adapter";
+import { BcryptAdapter } from "@/infra/criptography/bcrypt-adapter/bcrypt-adapter";
+import { DbAuthentication } from "@/data/usecases/authentication/db-authentication";
+import { AccountMongoRepository } from "@/infra/database/mongodb/account-repository/account-repository";
 
 const makeDbAuthenticationFactory = () => {
   const accountMongoRepository = new AccountMongoRepository();

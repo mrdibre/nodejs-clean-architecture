@@ -1,11 +1,11 @@
 import { DbAddAccount } from "./db-add-account";
-import { AccountModel } from "../../../../domain/models/account";
-import { AddAccountModel } from "../../../../domain/usecases/account/add-account";
+import { AccountModel } from "@/domain/models/account";
+import { AddAccountModel } from "@/domain/usecases/account/add-account";
 import {
   Hasher,
   AddAccountRepository,
   LoadAccountByEmailRepository,
-} from "../../../protocols";
+} from "@/data/protocols";
 
 const makeFakeAccount = () => ({
   id: "any_id",

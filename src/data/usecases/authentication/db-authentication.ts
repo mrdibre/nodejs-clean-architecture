@@ -1,13 +1,13 @@
 import {
-  HashComparer,
   Encrypter,
+  HashComparer,
   UpdateAccessTokenRepository,
   LoadAccountByEmailRepository,
-} from "../../protocols";
+} from "@/data/protocols";
 import {
   Authentication,
   AuthenticationModel,
-} from "../../../domain/usecases/authentication/authentication";
+} from "@/domain/usecases/authentication/authentication";
 
 class DbAuthentication implements Authentication {
   constructor(

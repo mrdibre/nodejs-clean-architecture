@@ -3,9 +3,9 @@ import request from "supertest";
 import { sign } from "jsonwebtoken";
 import { Collection } from "mongodb";
 
-import Env from "../../env";
-import { app } from "../../app";
-import { MongoHelper } from "../../../../infra/database/mongodb/helpers/mongo-helper";
+import Env from "@/main/config/env";
+import { app } from "@/main/config/app";
+import { MongoHelper } from "@/infra/database/mongodb/helpers/mongo-helper";
 
 let surveyCollection: Collection;
 let accountCollection: Collection;

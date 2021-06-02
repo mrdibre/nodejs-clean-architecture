@@ -1,7 +1,7 @@
 import { LogControllerDecorator } from "./log-controller-decorator";
-import { Controller } from "../../../presentation/protocols";
-import { serverError } from "../../../presentation/helpers/http/http-helper";
-import { LogErrorRepository } from "../../../data/protocols";
+import { Controller } from "@/presentation/protocols";
+import { serverError } from "@/presentation/helpers/http/http-helper";
+import { LogErrorRepository } from "@/data/protocols";
 
 const makeFakeRequest = () => ({
   body: {

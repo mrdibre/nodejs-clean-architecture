@@ -1,16 +1,16 @@
 import { LoginController } from "./login-controller";
-import { MissingParamError } from "../../../errors";
-import { Validation } from "../../../../validation/protocols";
+import { MissingParamError } from "@/presentation/errors";
+import { Validation } from "@/validation/protocols";
 import {
   Authentication,
   AuthenticationModel,
-} from "../../../../domain/usecases/authentication/authentication";
+} from "@/domain/usecases/authentication/authentication";
 import {
-  ok,
   badRequest,
+  ok,
   serverError,
   unauthorized,
-} from "../../../helpers/http/http-helper";
+} from "@/presentation/helpers/http/http-helper";
 
 const makeFakeRequest = () => ({
   body: {

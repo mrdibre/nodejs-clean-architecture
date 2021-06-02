@@ -1,17 +1,14 @@
 import Mockdate from "mockdate";
-import { HttpRequest } from "../../../protocols";
-import { MissingParamError } from "../../../errors";
+import { Validation } from "@/validation/protocols";
+import { HttpRequest } from "@/presentation/protocols";
+import { MissingParamError } from "@/presentation/errors";
 import { AddSurveyController } from "./add-survey-controller";
-import { Validation } from "../../../../validation/protocols";
 import {
   badRequest,
   noContent,
   serverError,
-} from "../../../helpers/http/http-helper";
-import {
-  AddSurvey,
-  AddSurveyModel,
-} from "../../../../domain/usecases/survey/add-survey";
+} from "@/presentation/helpers/http/http-helper";
+import { AddSurvey, AddSurveyModel } from "@/domain/usecases/survey/add-survey";
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {

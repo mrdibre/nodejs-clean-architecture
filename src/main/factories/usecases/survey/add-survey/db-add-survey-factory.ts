@@ -1,5 +1,5 @@
-import { SurveyMongoRepository } from "../../../../../infra/database/mongodb/survey-repository/survey-repository";
-import { DbAddSurvey } from "../../../../../data/usecases/add-survey/db-add-survey/db-add-survey";
+import { DbAddSurvey } from "@/data/usecases/add-survey/db-add-survey/db-add-survey";
+import { SurveyMongoRepository } from "@/infra/database/mongodb/survey-repository/survey-repository";
 
 const makeDbAddSurvey = () => {
   const surveyMongoRepository = new SurveyMongoRepository();

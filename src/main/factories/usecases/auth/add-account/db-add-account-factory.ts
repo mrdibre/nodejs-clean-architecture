@@ -1,6 +1,6 @@
-import { BcryptAdapter } from "../../../../../infra/criptography/bcrypt-adapter/bcrypt-adapter";
-import { DbAddAccount } from "../../../../../data/usecases/add-account/db-add-account/db-add-account";
-import { AccountMongoRepository } from "../../../../../infra/database/mongodb/account-repository/account-repository";
+import { BcryptAdapter } from "@/infra/criptography/bcrypt-adapter/bcrypt-adapter";
+import { DbAddAccount } from "@/data/usecases/add-account/db-add-account/db-add-account";
+import { AccountMongoRepository } from "@/infra/database/mongodb/account-repository/account-repository";
 
 const makeDbAddAccountFactory = () => {
   const bcryptAdapter = new BcryptAdapter(12);
