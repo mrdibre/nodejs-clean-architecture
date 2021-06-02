@@ -168,14 +168,14 @@ describe("Account Mongo Repository", () => {
         password: "any_password",
       });
 
-      expect(fakeAccount.accessToken).toBeFalsy();
+      expect(fakeAccount.token).toBeFalsy();
 
       await sut.updateAccessToken(fakeAccount._id, "any_token");
 
       const account = await accountCollection.findOne({ _id: fakeAccount._id });
 
       expect(account).toBeTruthy();
-      expect(account.accessToken).toBe("any_token");
+      expect(account.token).toBe("any_token");
     });
   });
 });
