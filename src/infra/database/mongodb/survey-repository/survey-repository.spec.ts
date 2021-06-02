@@ -6,6 +6,7 @@ let surveyCollection: Collection;
 
 const makeFakeSurvey = () => ({
   question: "any_question",
+  date: new Date(),
   answers: [
     {
       image: "any_image",

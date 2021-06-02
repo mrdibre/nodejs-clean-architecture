@@ -4,6 +4,7 @@ import { AddSurveyRepository } from "../../../protocols/database/survey/add-surv
 
 const makeFakeSurveyModel = () => ({
   question: "any_question",
+  date: new Date(),
   answers: [
     {
       image: "any_image",

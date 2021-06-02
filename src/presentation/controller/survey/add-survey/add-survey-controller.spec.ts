@@ -1,3 +1,4 @@
+import Mockdate from "mockdate";
 import { HttpRequest } from "../../../protocols";
 import { MissingParamError } from "../../../errors";
 import { AddSurveyController } from "./add-survey-controller";
@@ -15,6 +16,7 @@ import {
 const makeFakeRequest = (): HttpRequest => ({
   body: {
     question: "any_question",
+    date: new Date(),
     answers: [
       {
         image: "any_image",
@@ -57,6 +59,14 @@ const makeSut = () => {
 };
 
 describe("AddSurvey Controller", function () {
+  beforeAll(() => {
+    Mockdate.set(new Date());
+  });
+
+  afterAll(() => {
+    Mockdate.reset();
+  });
+
   test("Should call Validation with correct value", async () => {
     const { sut, validationStub } = makeSut();
 
