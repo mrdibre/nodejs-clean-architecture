@@ -141,7 +141,7 @@ describe("DbAddAccount UseCase", () => {
     await expect(promise).rejects.toThrow();
   });
 
-  test("Should return an account on success", async () => {
+  test("Should return an auth on success", async () => {
     const { sut } = makeSut();
 
     const accountData = {

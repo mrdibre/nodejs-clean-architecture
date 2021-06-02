@@ -26,7 +26,7 @@ describe("Account Mongo Repository", () => {
   });
 
   describe("add()", () => {
-    test("Should return an account on add success", async () => {
+    test("Should return an auth on add success", async () => {
       const { sut } = makeSut();
 
       const account = await sut.add({
@@ -44,7 +44,7 @@ describe("Account Mongo Repository", () => {
   });
 
   describe("loadByEmail()", () => {
-    test("Should return an account on loadByEmail success", async () => {
+    test("Should return an auth on loadByEmail success", async () => {
       const { sut } = makeSut();
 
       await accountCollection.insertOne({
@@ -72,7 +72,7 @@ describe("Account Mongo Repository", () => {
   });
 
   describe("loadByToken()", () => {
-    test("Should return an account on loadByToken without role", async () => {
+    test("Should return an auth on loadByToken without role", async () => {
       const { sut } = makeSut();
 
       await accountCollection.insertOne({
@@ -91,7 +91,7 @@ describe("Account Mongo Repository", () => {
       expect(account.password).toBe("any_password");
     });
 
-    test("Should return an account on loadByToken with admin role", async () => {
+    test("Should return an auth on loadByToken with admin role", async () => {
       const { sut } = makeSut();
 
       await accountCollection.insertOne({
@@ -127,7 +127,7 @@ describe("Account Mongo Repository", () => {
       expect(account).toBeFalsy();
     });
 
-    test("Should return an account on loadByToken if user is admin", async () => {
+    test("Should return an auth on loadByToken if user is admin", async () => {
       const { sut } = makeSut();
 
       await accountCollection.insertOne({
@@ -157,7 +157,7 @@ describe("Account Mongo Repository", () => {
   });
 
   describe("updateAccessToken()", () => {
-    test("Should update account accessToken on updateAccessTokenSuccess", async () => {
+    test("Should update auth accessToken on updateAccessTokenSuccess", async () => {
       const { sut } = makeSut();
 
       const {
