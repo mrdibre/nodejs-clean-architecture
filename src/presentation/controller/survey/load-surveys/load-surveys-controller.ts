@@ -1,14 +1,18 @@
 import { Controller, HttpResponse } from "../../../protocols";
 import { LoadSurveys } from "../../../../domain/usecases/survey/load-surveys";
-import { ok } from "../../../helpers/http/http-helper";
+import { ok, serverError } from "../../../helpers/http/http-helper";
 
 class LoadSurveysController implements Controller {
   constructor(private readonly loadSurveys: LoadSurveys) {}
 
   async handle(): Promise<HttpResponse> {
-    const surveys = await this.loadSurveys.load();
+    try {
+      const surveys = await this.loadSurveys.load();
 
-    return ok(surveys);
+      return ok(surveys);
+    } catch (e) {
+      return serverError(e);
+    }
   }
 }
 
