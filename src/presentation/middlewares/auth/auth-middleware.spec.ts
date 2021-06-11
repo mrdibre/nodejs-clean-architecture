@@ -80,7 +80,7 @@ describe("Auth Middleware", () => {
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()));
   });
 
-  test("Should return 200 if LoadAccountByToken returns an auth", async () => {
+  test("Should return 200 if LoadAccountByToken returns an account", async () => {
     const { sut } = makeSut();
 
     const httpResponse = await sut.handle(makeFakeHttpRequest());
