@@ -88,5 +88,29 @@ describe("Account Mongo Repository", () => {
       expect(surveyResult.id).toBeTruthy();
       expect(surveyResult.answer).toBe(survey.answers[0].answer);
     });
+
+    test("Should update a survey result if already exists", async () => {
+      const { sut } = makeSut();
+
+      const survey = await makeSurvey();
+      const account = await makeAccount();
+
+      const data = makeSurveyResult(
+        survey.id,
+        account.id,
+        survey.answers[0].answer,
+      );
+
+      const { ops: res } = await surveyResultCollection.insertOne(data);
+
+      const surveyResult = await sut.save({
+        ...data,
+        answer: survey.answers[1].answer,
+      });
+
+      expect(surveyResult).toBeTruthy();
+      expect(surveyResult.id).toEqual(res[0]._id);
+      expect(surveyResult.answer).toBe(survey.answers[1].answer);
+    });
   });
 });
