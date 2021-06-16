@@ -26,7 +26,7 @@ class AccountMongoRepository
     const accountCollection = await MongoHelper.getCollection("accounts");
     const account = await accountCollection.findOne({ email });
 
-    return account ? MongoHelper.mapModelToId(account) : null;
+    return MongoHelper.mapModelToId(account);
   }
 
   async loadByToken(token: string, role?: string): Promise<AccountModel> {
@@ -36,7 +36,7 @@ class AccountMongoRepository
       $or: [{ role }, { role: "admin" }],
     });
 
-    return account ? MongoHelper.mapModelToId(account) : null;
+    return MongoHelper.mapModelToId(account);
   }
 
   async updateAccessToken(id: string, token: string): Promise<void> {

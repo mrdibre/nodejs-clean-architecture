@@ -21,17 +21,20 @@ const MongoHelper = {
 
     return this.client.db().collection(name);
   },
-  mapModelToId(accountData: any): any {
-    if (!accountData) {
-      return accountData;
+  mapModelToId(data: any): any {
+    if (!data) {
+      return null;
     }
 
-    const { _id, ...account } = accountData;
+    const { _id, ...props } = data;
 
     return {
       id: _id,
-      ...account,
+      ...props,
     };
+  },
+  mapModelsToId(data: any[]): any[] {
+    return data.map(this.mapModelToId);
   },
 };
 

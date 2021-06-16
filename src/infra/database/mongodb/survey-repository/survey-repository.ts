@@ -13,19 +13,25 @@ class SurveyMongoRepository
   async add(surveyModel: AddSurveyModel): Promise<void> {
     const accountCollection = await MongoHelper.getCollection("surveys");
 
-    await accountCollection.insertOne(surveyModel);
+    const survey = await accountCollection.insertOne(surveyModel);
+
+    return MongoHelper.mapModelToId(survey);
   }
 
   async loadAll(): Promise<SurveyModel[]> {
     const surveyCollection = await MongoHelper.getCollection("surveys");
 
-    return surveyCollection.find().toArray();
+    const surveys = await surveyCollection.find().toArray();
+
+    return MongoHelper.mapModelsToId(surveys);
   }
 
   async loadById(id: string): Promise<SurveyModel> {
     const surveyCollection = await MongoHelper.getCollection("surveys");
 
-    return surveyCollection.findOne({ _id: id });
+    const survey = await surveyCollection.findOne({ _id: id });
+
+    return MongoHelper.mapModelToId(survey);
   }
 }
 
