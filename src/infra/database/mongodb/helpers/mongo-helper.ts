@@ -22,6 +22,10 @@ const MongoHelper = {
     return this.client.db().collection(name);
   },
   mapModelToId(accountData: any): any {
+    if (!accountData) {
+      return accountData;
+    }
+
     const { _id, ...account } = accountData;
 
     return {
