@@ -11,8 +11,7 @@ class DbSaveSurveyResult implements SaveSurveyResult {
   ) {}
 
   async save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
-    await this.saveSurveyResultRepository.save(data);
-    return null;
+    return this.saveSurveyResultRepository.save(data);
   }
 }
 
