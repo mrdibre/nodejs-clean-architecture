@@ -99,18 +99,6 @@ describe("SaveSurveyResult Controller", () => {
     expect(response).toEqual(forbidden(new InvalidParamError("surveyId")));
   });
 
-  test("Should return 500 if LoadSurveys throws", async () => {
-    const { sut, loadSurveyById } = makeSut();
-
-    jest
-      .spyOn(loadSurveyById, "loadById")
-      .mockReturnValueOnce(Promise.reject(new Error()));
-
-    const response = await sut.handle(makeFakeRequest());
-
-    expect(response).toEqual(serverError(new Error()));
-  });
-
   test("Should return 403 if an invalid answer is provided", async () => {
     const { sut } = makeSut();
 
@@ -126,6 +114,18 @@ describe("SaveSurveyResult Controller", () => {
     expect(response).toEqual(forbidden(new InvalidParamError("answer")));
   });
 
+  test("Should return 500 if LoadSurveys throws", async () => {
+    const { sut, loadSurveyById } = makeSut();
+
+    jest
+      .spyOn(loadSurveyById, "loadById")
+      .mockReturnValueOnce(Promise.reject(new Error()));
+
+    const response = await sut.handle(makeFakeRequest());
+
+    expect(response).toEqual(serverError(new Error()));
+  });
+
   test("Should call SaveSurveyResult with correct values", async () => {
     const { sut, saveSurveyResult } = makeSut();
 
@@ -139,5 +139,17 @@ describe("SaveSurveyResult Controller", () => {
       surveyId: "any_survey_id",
       accountId: "any_account_id",
     });
+  });
+
+  test("Should return 500 if SaveSurveyResult throws", async () => {
+    const { sut, saveSurveyResult } = makeSut();
+
+    jest
+      .spyOn(saveSurveyResult, "save")
+      .mockReturnValueOnce(Promise.reject(new Error()));
+
+    const response = await sut.handle(makeFakeRequest());
+
+    expect(response).toEqual(serverError(new Error()));
   });
 });
