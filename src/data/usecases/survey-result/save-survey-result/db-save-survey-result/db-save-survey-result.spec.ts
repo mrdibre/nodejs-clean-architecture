@@ -1,7 +1,7 @@
 import { DbSaveSurveyResult } from "./db-save-survey-result";
 import { SurveyResultModel } from "@/domain/models/survey";
-import { SaveSurveyResultModel } from "@/domain/usecases/survey/save-survey-result";
-import { SaveSurveyResultRepository } from "@/data/protocols/database/survey/save-survey-result-repository";
+import { SaveSurveyResultModel } from "@/domain/usecases/survey-result/save-survey-result";
+import { SaveSurveyResultRepository } from "@/data/protocols/database/survey-result/save-survey-result-repository";
 
 const makeFakeSurveyResultData = (): SaveSurveyResultModel => ({
   answer: "any_answer",
