@@ -1,12 +1,17 @@
-import { SurveyModel } from "@/domain/models/survey";
+import Mockdate from "mockdate";
 import { HttpRequest } from "@/presentation/protocols";
 import { InvalidParamError } from "@/presentation/errors";
+import { SurveyModel, SurveyResultModel } from "@/domain/models/survey";
 import { LoadSurveyById } from "@/domain/usecases/survey/load-survey-by-id";
 import { SaveSurveyResultController } from "./save-survey-result-controller";
 import {
   forbidden,
   serverError,
 } from "@/presentation/helpers/http/http-helper";
+import {
+  SaveSurveyResult,
+  SaveSurveyResultModel,
+} from "@/domain/usecases/survey-result/save-survey-result";
 
 const makeFakeRequest = (): HttpRequest => ({
   params: {
@@ -15,10 +20,11 @@ const makeFakeRequest = (): HttpRequest => ({
   body: {
     answer: "any_answer",
   },
+  accountId: "any_account_id",
 });
 
 const makeFakeSurvey = (): SurveyModel => ({
-  id: "any_id",
+  id: "any_survey_id",
   question: "any_question",
   date: new Date(),
   answers: [
@@ -39,18 +45,38 @@ const makeLoadSurveyById = (): LoadSurveyById => {
   return new LoadSurveyByIdStub();
 };
 
+const makeSaveSurveyResult = (): SaveSurveyResult => {
+  class SaveSurveyResultStub implements SaveSurveyResult {
+    async save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
+      return null;
+    }
+  }
+
+  return new SaveSurveyResultStub();
+};
+
 const makeSut = () => {
   const loadSurveyById = makeLoadSurveyById();
+  const saveSurveyResult = makeSaveSurveyResult();
 
-  const sut = new SaveSurveyResultController(loadSurveyById);
+  const sut = new SaveSurveyResultController(loadSurveyById, saveSurveyResult);
 
   return {
     sut,
     loadSurveyById,
+    saveSurveyResult,
   };
 };
 
 describe("SaveSurveyResult Controller", () => {
+  beforeAll(() => {
+    Mockdate.set(new Date());
+  });
+
+  afterAll(() => {
+    Mockdate.reset();
+  });
+
   test("Should call LoadSurveyById with correct values", async () => {
     const { sut, loadSurveyById } = makeSut();
 
@@ -98,5 +124,20 @@ describe("SaveSurveyResult Controller", () => {
     });
 
     expect(response).toEqual(forbidden(new InvalidParamError("answer")));
+  });
+
+  test("Should call SaveSurveyResult with correct values", async () => {
+    const { sut, saveSurveyResult } = makeSut();
+
+    const saveSpy = jest.spyOn(saveSurveyResult, "save");
+
+    await sut.handle(makeFakeRequest());
+
+    expect(saveSpy).toHaveBeenCalledWith({
+      answer: "any_answer",
+      date: new Date(),
+      surveyId: "any_survey_id",
+      accountId: "any_account_id",
+    });
   });
 });

@@ -10,9 +10,13 @@ import {
   forbidden,
   serverError,
 } from "@/presentation/helpers/http/http-helper";
+import { SaveSurveyResult } from "@/domain/usecases/survey-result/save-survey-result";
 
 class SaveSurveyResultController implements Controller {
-  constructor(private readonly loadSurveyById: LoadSurveyById) {}
+  constructor(
+    private readonly loadSurveyById: LoadSurveyById,
+    private readonly saveSurveyResult: SaveSurveyResult,
+  ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -26,6 +30,13 @@ class SaveSurveyResultController implements Controller {
         if (!answers.includes(body.answer)) {
           return forbidden(new InvalidParamError("answer"));
         }
+
+        await this.saveSurveyResult.save({
+          date: new Date(),
+          answer: body.answer,
+          surveyId: survey.id,
+          accountId: httpRequest.accountId,
+        });
       }
 
       return forbidden(new InvalidParamError("surveyId"));

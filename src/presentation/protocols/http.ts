@@ -8,4 +8,5 @@ export interface HttpRequest {
   headers?: any;
   params?: any;
   query?: any;
+  accountId?: string;
 }
