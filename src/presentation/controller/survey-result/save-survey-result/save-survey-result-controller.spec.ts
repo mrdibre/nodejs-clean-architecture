@@ -5,6 +5,7 @@ import { SurveyModel, SurveyResultModel } from "@/domain/models/survey";
 import { LoadSurveyById } from "@/domain/usecases/survey/load-survey-by-id";
 import { SaveSurveyResultController } from "./save-survey-result-controller";
 import {
+  ok,
   forbidden,
   serverError,
 } from "@/presentation/helpers/http/http-helper";
@@ -21,6 +22,14 @@ const makeFakeRequest = (): HttpRequest => ({
     answer: "any_answer",
   },
   accountId: "any_account_id",
+});
+
+const makeFakeSurveyResult = (): SurveyResultModel => ({
+  id: "valid_id",
+  date: new Date(),
+  answer: "valid_answer",
+  surveyId: "valid_survey_id",
+  accountId: "valid_account_id",
 });
 
 const makeFakeSurvey = (): SurveyModel => ({
@@ -48,7 +57,7 @@ const makeLoadSurveyById = (): LoadSurveyById => {
 const makeSaveSurveyResult = (): SaveSurveyResult => {
   class SaveSurveyResultStub implements SaveSurveyResult {
     async save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
-      return null;
+      return makeFakeSurveyResult();
     }
   }
 
@@ -151,5 +160,13 @@ describe("SaveSurveyResult Controller", () => {
     const response = await sut.handle(makeFakeRequest());
 
     expect(response).toEqual(serverError(new Error()));
+  });
+
+  test("Should return 200 on success", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.handle(makeFakeRequest());
+
+    expect(response).toEqual(ok(makeFakeSurveyResult()));
   });
 });
