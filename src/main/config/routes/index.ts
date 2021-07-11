@@ -1,6 +1,7 @@
 import { Express, Router } from "express";
 import { registerAuthRoutes } from "./auth/router";
 import { registerSurveyRoutes } from "./survey/router";
+import { registerSurveyResultRoutes } from "./survey-result/router";
 
 const useRoutes = (app: Express) => {
   const router = Router();
@@ -9,6 +10,7 @@ const useRoutes = (app: Express) => {
 
   registerAuthRoutes(router);
   registerSurveyRoutes(router);
+  registerSurveyResultRoutes(router);
 };
 
 export { useRoutes };
