@@ -37,6 +37,14 @@ describe("Survey Routes", () => {
     await MongoHelper.disconnect();
   });
 
+  beforeEach(async () => {
+    surveyCollection = await MongoHelper.getCollection("surveys");
+    accountCollection = await MongoHelper.getCollection("accounts");
+
+    await surveyCollection.deleteMany({});
+    await accountCollection.deleteMany({});
+  });
+
   describe("PUT /surveys/:surveyId/results", () => {
     test("Should return 403 on save survey result without accessToken", async () => {
       await request(app)
@@ -45,6 +53,31 @@ describe("Survey Routes", () => {
           answer: "any_answer",
         })
         .expect(403);
+    });
+
+    test("Should return 200 on save survey result with valid accessToken", async () => {
+      const token = await makeToken();
+
+      const res = await surveyCollection.insertOne({
+        question: "any_question",
+        answers: [
+          {
+            image: "http://image-name.com",
+            answer: "Answer 1",
+          },
+          {
+            answer: "Answer 2",
+          },
+        ],
+      });
+
+      await request(app)
+        .put(`/api/surveys/${res.ops[0]._id}/results`)
+        .set("x-access-token", token)
+        .send({
+          answer: "Answer 1",
+        })
+        .expect(200);
     });
   });
 });

@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { Controller, HttpRequest } from "@/presentation/protocols";
 
 const adaptExpressRoute = (controller: Controller) => {
-  return async (req: Request, res: Response) => {
-    const httpRequest: HttpRequest = { body: req.body };
+  return async ({ body, params, accountId }: Request, res: Response) => {
+    const httpRequest: HttpRequest = { body, params, accountId };
 
     const httpResponse = await controller.handle(httpRequest);
 
