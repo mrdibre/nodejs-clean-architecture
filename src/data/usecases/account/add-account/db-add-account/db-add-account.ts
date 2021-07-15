@@ -6,7 +6,7 @@ import {
 } from "@/data/protocols";
 import {
   AddAccount,
-  AddAccountModel,
+  AddAccountParams,
 } from "@/domain/usecases/account/add-account";
 
 class DbAddAccount implements AddAccount {
@@ -16,7 +16,7 @@ class DbAddAccount implements AddAccount {
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
   ) {}
 
-  async add(accountData: AddAccountModel): Promise<AccountModel> {
+  async add(accountData: AddAccountParams): Promise<AccountModel> {
     const hashedPassword = await this.encrypter.hash(accountData.password);
 
     const alreadyExists = await this.loadAccountByEmailRepository.loadByEmail(

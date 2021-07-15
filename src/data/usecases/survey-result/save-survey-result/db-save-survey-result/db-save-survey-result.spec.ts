@@ -1,9 +1,10 @@
-import { DbSaveSurveyResult } from "./db-save-survey-result";
+import Mockdate from "mockdate";
 import { SurveyResultModel } from "@/domain/models/survey";
-import { SaveSurveyResultModel } from "@/domain/usecases/survey-result/save-survey-result";
+import { DbSaveSurveyResult } from "./db-save-survey-result";
+import { SaveSurveyResultParams } from "@/domain/usecases/survey-result/save-survey-result";
 import { SaveSurveyResultRepository } from "@/data/protocols/database/survey-result/save-survey-result-repository";
 
-const makeFakeSurveyResultData = (): SaveSurveyResultModel => ({
+const makeFakeSurveyResultData = (): SaveSurveyResultParams => ({
   answer: "any_answer",
   surveyId: "any_survey_id",
   accountId: "any_account)id",
@@ -17,7 +18,7 @@ const makeFakeSurveyResult = (): SurveyResultModel => ({
 
 const makeSaveSurveyResultRepositoryStub = () => {
   class SaveSurveyResultRepositoryStub implements SaveSurveyResultRepository {
-    async save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
+    async save(data: SaveSurveyResultParams): Promise<SurveyResultModel> {
       return makeFakeSurveyResult();
     }
   }
@@ -37,6 +38,14 @@ const makeSut = () => {
 };
 
 describe("DbSaveSurveyResult UseCase", () => {
+  beforeAll(() => {
+    Mockdate.set(new Date());
+  });
+
+  afterAll(() => {
+    Mockdate.reset;
+  });
+
   test("Should call SaveSurveyResultRepository with correct values", async () => {
     const { sut, saveSurveyResultRepositoryStub } = makeSut();
 

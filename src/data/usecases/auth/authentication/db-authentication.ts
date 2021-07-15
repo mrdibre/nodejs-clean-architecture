@@ -6,7 +6,7 @@ import {
 } from "@/data/protocols";
 import {
   Authentication,
-  AuthenticationModel,
+  AuthenticationParams,
 } from "@/domain/usecases/authentication/authentication";
 
 class DbAuthentication implements Authentication {
@@ -17,7 +17,7 @@ class DbAuthentication implements Authentication {
     private readonly updateAccessTokenRepository: UpdateAccessTokenRepository,
   ) {}
 
-  async auth(authentication: AuthenticationModel): Promise<string> {
+  async auth(authentication: AuthenticationParams): Promise<string> {
     const account = await this.loadAccountByEmailRepository.loadByEmail(
       authentication.email,
     );

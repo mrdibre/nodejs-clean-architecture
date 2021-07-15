@@ -3,7 +3,7 @@ import { MissingParamError } from "@/presentation/errors";
 import { Validation } from "@/validation/protocols";
 import {
   Authentication,
-  AuthenticationModel,
+  AuthenticationParams,
 } from "@/domain/usecases/authentication/authentication";
 import {
   badRequest,
@@ -21,7 +21,7 @@ const makeFakeRequest = () => ({
 
 const makeAuthentication = () => {
   class AuthenticationStub implements Authentication {
-    async auth(authentication: AuthenticationModel): Promise<string> {
+    async auth(authentication: AuthenticationParams): Promise<string> {
       return "any_token";
     }
   }

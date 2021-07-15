@@ -1,7 +1,7 @@
 import { SaveSurveyResultRepository } from "@/data/protocols/database/survey-result/save-survey-result-repository";
 import {
   SaveSurveyResult,
-  SaveSurveyResultModel,
+  SaveSurveyResultParams,
 } from "@/domain/usecases/survey-result/save-survey-result";
 import { SurveyResultModel } from "@/domain/models/survey";
 
@@ -10,7 +10,7 @@ class DbSaveSurveyResult implements SaveSurveyResult {
     private readonly saveSurveyResultRepository: SaveSurveyResultRepository,
   ) {}
 
-  async save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
+  async save(data: SaveSurveyResultParams): Promise<SurveyResultModel> {
     return this.saveSurveyResultRepository.save(data);
   }
 }

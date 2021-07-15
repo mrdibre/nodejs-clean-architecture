@@ -8,7 +8,10 @@ import {
   noContent,
   serverError,
 } from "@/presentation/helpers/http/http-helper";
-import { AddSurvey, AddSurveyModel } from "@/domain/usecases/survey/add-survey";
+import {
+  AddSurvey,
+  AddSurveyParams,
+} from "@/domain/usecases/survey/add-survey";
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -35,7 +38,7 @@ const makeValidation = () => {
 
 const makeAddSurvey = () => {
   class AddSurveyStub implements AddSurvey {
-    async add(data: AddSurveyModel) {
+    async add(data: AddSurveyParams) {
       return;
     }
   }

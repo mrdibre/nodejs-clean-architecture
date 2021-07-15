@@ -11,7 +11,7 @@ import {
 } from "@/presentation/helpers/http/http-helper";
 import {
   SaveSurveyResult,
-  SaveSurveyResultModel,
+  SaveSurveyResultParams,
 } from "@/domain/usecases/survey-result/save-survey-result";
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -56,7 +56,7 @@ const makeLoadSurveyById = (): LoadSurveyById => {
 
 const makeSaveSurveyResult = (): SaveSurveyResult => {
   class SaveSurveyResultStub implements SaveSurveyResult {
-    async save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
+    async save(data: SaveSurveyResultParams): Promise<SurveyResultModel> {
       return makeFakeSurveyResult();
     }
   }

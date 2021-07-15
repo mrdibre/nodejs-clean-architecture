@@ -15,7 +15,7 @@ import {
 } from "@/presentation/helpers/http/http-helper";
 import {
   Authentication,
-  AuthenticationModel,
+  AuthenticationParams,
 } from "@/domain/usecases/authentication/authentication";
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -56,7 +56,7 @@ const makeValidation = () => {
 
 const makeAuthentication = () => {
   class AuthenticationStub implements Authentication {
-    async auth(authentication: AuthenticationModel): Promise<string> {
+    async auth(authentication: AuthenticationParams): Promise<string> {
       return "any_token";
     }
   }
