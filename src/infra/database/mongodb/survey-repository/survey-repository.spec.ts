@@ -1,22 +1,9 @@
 import { Collection } from "mongodb";
 import { MongoHelper } from "../helpers/mongo-helper";
 import { SurveyMongoRepository } from "./survey-repository";
+import { mockSurveyModel } from "@/domain/test";
 
 let surveyCollection: Collection;
-
-const makeFakeSurvey = () => ({
-  question: "any_question",
-  date: new Date(),
-  answers: [
-    {
-      image: "any_image",
-      answer: "any_answer",
-    },
-    {
-      answer: "other_answer",
-    },
-  ],
-});
 
 const makeSut = () => {
   const sut = new SurveyMongoRepository();
@@ -43,7 +30,7 @@ describe("Account Mongo Repository", () => {
     test("Should add a survey on success", async () => {
       const { sut } = makeSut();
 
-      const surveyData = makeFakeSurvey();
+      const surveyData = mockSurveyModel();
 
       await sut.add(surveyData);
 

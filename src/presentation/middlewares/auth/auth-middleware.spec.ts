@@ -8,6 +8,7 @@ import {
   forbidden,
   serverError,
 } from "@/presentation/helpers/http/http-helper";
+import { mockAccountModel } from "@/domain/test";
 
 const makeFakeHttpRequest = (): HttpRequest => ({
   headers: {
@@ -15,17 +16,10 @@ const makeFakeHttpRequest = (): HttpRequest => ({
   },
 });
 
-const makeFakeAccount = (): AccountModel => ({
-  id: "any_id",
-  name: "any_name",
-  email: "any_email",
-  password: "any_password",
-});
-
 const makeLoadAccountByToken = () => {
   class LoadAccountByTokenStub implements LoadAccountByToken {
     async load(token: string): Promise<AccountModel> {
-      return makeFakeAccount();
+      return mockAccountModel();
     }
   }
 
@@ -85,7 +79,7 @@ describe("Auth Middleware", () => {
 
     const httpResponse = await sut.handle(makeFakeHttpRequest());
 
-    expect(httpResponse).toEqual(ok({ accountId: "any_id" }));
+    expect(httpResponse).toEqual(ok({ accountId: "any_token" }));
   });
 
   test("Should return 500 if LoadAccountByToken throws", async () => {

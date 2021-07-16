@@ -1,7 +1,7 @@
 import { LogControllerDecorator } from "./log-controller-decorator";
 import { Controller } from "@/presentation/protocols";
 import { serverError } from "@/presentation/helpers/http/http-helper";
-import { LogErrorRepository } from "@/data/protocols";
+import { mockLogErrorRepository } from "@/data/test";
 
 const makeFakeRequest = () => ({
   body: {
@@ -11,16 +11,6 @@ const makeFakeRequest = () => ({
     passwordConfirmation: "any_password",
   },
 });
-
-const makeLogErrorRepository = () => {
-  class LogErrorRepositoryStub implements LogErrorRepository {
-    async logError(stack: string): Promise<void> {
-      return;
-    }
-  }
-
-  return new LogErrorRepositoryStub();
-};
 
 const makeControllerStub = () => {
   class ControllerStub implements Controller {
@@ -39,7 +29,7 @@ const makeControllerStub = () => {
 
 const makeSut = () => {
   const controllerStub = makeControllerStub();
-  const logErrorRepositoryStub = makeLogErrorRepository();
+  const logErrorRepositoryStub = mockLogErrorRepository();
 
   const sut = new LogControllerDecorator(
     controllerStub,

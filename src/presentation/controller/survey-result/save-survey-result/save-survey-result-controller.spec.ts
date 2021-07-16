@@ -13,6 +13,7 @@ import {
   SaveSurveyResult,
   SaveSurveyResultParams,
 } from "@/domain/usecases/survey-result/save-survey-result";
+import { mockSurveyModel } from "@/domain/test";
 
 const makeFakeRequest = (): HttpRequest => ({
   params: {
@@ -32,22 +33,10 @@ const makeFakeSurveyResult = (): SurveyResultModel => ({
   accountId: "valid_account_id",
 });
 
-const makeFakeSurvey = (): SurveyModel => ({
-  id: "any_survey_id",
-  question: "any_question",
-  date: new Date(),
-  answers: [
-    {
-      image: "any_image",
-      answer: "any_answer",
-    },
-  ],
-});
-
 const makeLoadSurveyById = (): LoadSurveyById => {
   class LoadSurveyByIdStub implements LoadSurveyById {
     async loadById(id: string): Promise<SurveyModel> {
-      return makeFakeSurvey();
+      return mockSurveyModel();
     }
   }
 
@@ -145,7 +134,7 @@ describe("SaveSurveyResult Controller", () => {
     expect(saveSpy).toHaveBeenCalledWith({
       answer: "any_answer",
       date: new Date(),
-      surveyId: "any_survey_id",
+      surveyId: "any_id",
       accountId: "any_account_id",
     });
   });

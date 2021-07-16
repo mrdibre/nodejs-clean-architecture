@@ -7,30 +7,11 @@ import {
   ok,
   serverError,
 } from "@/presentation/helpers/http/http-helper";
+import { mockSurveyModel } from "@/domain/test";
 
 const makeFakeSurveys = (): SurveyModel[] => [
-  {
-    id: "any_id",
-    question: "any_question",
-    date: new Date(),
-    answers: [
-      {
-        image: "any_image",
-        answer: "any_answer",
-      },
-    ],
-  },
-  {
-    id: "other_id",
-    question: "other_question",
-    date: new Date(),
-    answers: [
-      {
-        image: "other_image",
-        answer: "other_answer",
-      },
-    ],
-  },
+  mockSurveyModel(),
+  mockSurveyModel(),
 ];
 
 const makeLoadSurveys = () => {
