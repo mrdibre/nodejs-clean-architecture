@@ -1,3 +1,4 @@
+import { mockAccountModel } from "@/domain/test";
 import { AccountModel } from "@/domain/models/account";
 import { DbLoadAccountByToken } from "./db-load-account-by-token";
 import { Decrypter } from "@/data/protocols/criptography/decrypter";
@@ -13,18 +14,11 @@ const makeDecrypter = () => {
   return new DecrypterStub();
 };
 
-const makeFakeAccount = () => ({
-  id: "any_token",
-  name: "any_name",
-  email: "any_email",
-  password: "any_password",
-});
-
 const makeLoadAccountByTokenRepository = () => {
   class LoadAccountByTokenRepositoryStub
     implements LoadAccountByTokenRepository {
     async loadByToken(value: string, role?: string): Promise<AccountModel> {
-      return makeFakeAccount();
+      return mockAccountModel();
     }
   }
 
@@ -97,7 +91,7 @@ describe("DbLoadAccountByToken Usecase", () => {
 
     const account = await sut.load("any_token", "any_role");
 
-    expect(account).toEqual(makeFakeAccount());
+    expect(account).toEqual(mockAccountModel());
   });
 
   test("Should throw if Decrypter throws", async () => {
