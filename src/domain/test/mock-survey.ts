@@ -32,6 +32,7 @@ const mockSurveyModels = (): SurveyModel[] => [
   {
     ...mockSurveyModel(),
     id: "other_id",
+    question: "other_question",
   },
 ];
 

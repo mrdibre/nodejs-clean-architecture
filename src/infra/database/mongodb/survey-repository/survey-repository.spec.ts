@@ -1,7 +1,7 @@
 import { Collection } from "mongodb";
 import { MongoHelper } from "../helpers/mongo-helper";
 import { SurveyMongoRepository } from "./survey-repository";
-import { mockSurveyModel } from "@/domain/test";
+import { mockSurveyModel, mockSurveyModels } from "@/domain/test";
 
 let surveyCollection: Collection;
 
@@ -47,28 +47,7 @@ describe("Account Mongo Repository", () => {
     test("Should load all surveys on success", async () => {
       const { sut } = makeSut();
 
-      await surveyCollection.insertMany([
-        {
-          question: "any_question",
-          date: new Date(),
-          answers: [
-            {
-              image: "any_image",
-              answer: "any_answer",
-            },
-          ],
-        },
-        {
-          question: "other_question",
-          date: new Date(),
-          answers: [
-            {
-              image: "other_image",
-              answer: "other_answer",
-            },
-          ],
-        },
-      ]);
+      await surveyCollection.insertMany(mockSurveyModels());
 
       const surveys = await sut.loadAll();
 
@@ -90,16 +69,7 @@ describe("Account Mongo Repository", () => {
     test("Should load survey by id on success", async () => {
       const { sut } = makeSut();
 
-      const { ops } = await surveyCollection.insertOne({
-        question: "any_question",
-        date: new Date(),
-        answers: [
-          {
-            image: "any_image",
-            answer: "any_answer",
-          },
-        ],
-      });
+      const { ops } = await surveyCollection.insertOne(mockSurveyModel());
 
       const id = ops[0]._id;
 

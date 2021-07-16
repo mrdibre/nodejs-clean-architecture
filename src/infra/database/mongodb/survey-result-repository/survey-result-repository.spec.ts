@@ -3,25 +3,14 @@ import { MongoHelper } from "../helpers/mongo-helper";
 import { SurveyResultMongoRepository } from "./survey-result-repository";
 import { SurveyModel } from "@/domain/models/survey";
 import { AccountModel } from "@/domain/models/account";
+import { mockSurveyModel } from "@/domain/test";
 
 let surveyCollection: Collection;
 let surveyResultCollection: Collection;
 let accountCollection: Collection;
 
 const makeSurvey = async (): Promise<SurveyModel> => {
-  const { ops } = await surveyCollection.insertOne({
-    question: "any_question",
-    date: new Date(),
-    answers: [
-      {
-        image: "any_image",
-        answer: "any_answer",
-      },
-      {
-        answer: "other_answer",
-      },
-    ],
-  });
+  const { ops } = await surveyCollection.insertOne(mockSurveyModel());
 
   return ops[0];
 };
