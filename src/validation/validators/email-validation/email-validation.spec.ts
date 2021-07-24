@@ -1,19 +1,9 @@
 import { InvalidParamError, ServerError } from "@/presentation/errors";
-import { EmailValidator } from "@/validation/protocols";
+import { mockEmailValidator } from "@/validation/test";
 import { EmailValidation } from "./email-validation";
 
-const makeEmailValidator = () => {
-  class EmailValidatorStub implements EmailValidator {
-    isValid(email) {
-      return true;
-    }
-  }
-
-  return new EmailValidatorStub();
-};
-
 const makeSut = () => {
-  const emailValidatorStub = makeEmailValidator();
+  const emailValidatorStub = mockEmailValidator();
 
   const sut = new EmailValidation("email", emailValidatorStub);
 

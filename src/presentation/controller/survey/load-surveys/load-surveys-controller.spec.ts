@@ -1,31 +1,15 @@
 import Mockdate from "mockdate";
-import { SurveyModel } from "@/domain/models/survey";
 import { LoadSurveysController } from "./load-surveys-controller";
-import { LoadSurveys } from "@/domain/usecases/survey/load-surveys";
 import {
-  noContent,
   ok,
+  noContent,
   serverError,
 } from "@/presentation/helpers/http/http-helper";
-import { mockSurveyModel } from "@/domain/test";
-
-const makeFakeSurveys = (): SurveyModel[] => [
-  mockSurveyModel(),
-  mockSurveyModel(),
-];
-
-const makeLoadSurveys = () => {
-  class LoadSurveysStub implements LoadSurveys {
-    async load(): Promise<SurveyModel[]> {
-      return makeFakeSurveys();
-    }
-  }
-
-  return new LoadSurveysStub();
-};
+import { mockSurveyModels } from "@/domain/test";
+import { mockLoadSurveys } from "@/presentation/test";
 
 const makeSut = () => {
-  const loadSurveysStub = makeLoadSurveys();
+  const loadSurveysStub = mockLoadSurveys();
 
   const sut = new LoadSurveysController(loadSurveysStub);
 
@@ -59,7 +43,7 @@ describe("LoadSurveys Controller", () => {
 
     const httpResponse = await sut.handle();
 
-    expect(httpResponse).toEqual(ok(makeFakeSurveys()));
+    expect(httpResponse).toEqual(ok(mockSurveyModels()));
   });
 
   test("Should return 204 if LoadSurveys return empty", async () => {

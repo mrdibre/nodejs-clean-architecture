@@ -3,7 +3,7 @@ import { Controller } from "@/presentation/protocols";
 import { serverError } from "@/presentation/helpers/http/http-helper";
 import { mockLogErrorRepository } from "@/data/test";
 
-const makeFakeRequest = () => ({
+const mockRequest = () => ({
   body: {
     email: "any@gmail.com",
     name: "any_email",
@@ -49,7 +49,7 @@ describe("LogController decorator", () => {
 
     const handleSpy = jest.spyOn(controllerStub, "handle");
 
-    const httpRequest = makeFakeRequest();
+    const httpRequest = mockRequest();
 
     await sut.handle(httpRequest);
 
@@ -59,7 +59,7 @@ describe("LogController decorator", () => {
   test("Should return the same result of the controller", async () => {
     const { sut } = makeSut();
 
-    const httpRequest = makeFakeRequest();
+    const httpRequest = mockRequest();
 
     const httpResponse = await sut.handle(httpRequest);
 
@@ -84,7 +84,7 @@ describe("LogController decorator", () => {
 
     const logSpy = jest.spyOn(logErrorRepositoryStub, "logError");
 
-    const httpRequest = makeFakeRequest();
+    const httpRequest = mockRequest();
 
     await sut.handle(httpRequest);
 

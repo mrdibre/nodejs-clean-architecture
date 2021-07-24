@@ -1,19 +1,9 @@
-import { Validation } from "@/validation/protocols";
 import { MissingParamError } from "@/presentation/errors";
 import { ValidationComposite } from "./validation-composite";
-
-const makeValidationStub = () => {
-  class ValidationStub implements Validation {
-    validate(input: any): Error {
-      return null;
-    }
-  }
-
-  return new ValidationStub();
-};
+import { mockValidation } from "@/validation/test";
 
 const makeSut = () => {
-  const validationStubs = [makeValidationStub(), makeValidationStub()];
+  const validationStubs = [mockValidation(), mockValidation()];
 
   const sut = new ValidationComposite(validationStubs);
 

@@ -1,21 +1,16 @@
 import Mockdate from "mockdate";
 import { HttpRequest } from "@/presentation/protocols";
 import { InvalidParamError } from "@/presentation/errors";
-import { SurveyModel, SurveyResultModel } from "@/domain/models/survey";
-import { LoadSurveyById } from "@/domain/usecases/survey/load-survey-by-id";
 import { SaveSurveyResultController } from "./save-survey-result-controller";
 import {
   ok,
   forbidden,
   serverError,
 } from "@/presentation/helpers/http/http-helper";
-import {
-  SaveSurveyResult,
-  SaveSurveyResultParams,
-} from "@/domain/usecases/survey-result/save-survey-result";
-import { mockSurveyModel } from "@/domain/test";
+import { mockSurveyResultModel } from "@/domain/test";
+import { mockLoadSurveyById, mockSaveSurveyResult } from "@/presentation/test";
 
-const makeFakeRequest = (): HttpRequest => ({
+const mockRequest = (): HttpRequest => ({
   params: {
     surveyId: "any_survey_id",
   },
@@ -25,37 +20,9 @@ const makeFakeRequest = (): HttpRequest => ({
   accountId: "any_account_id",
 });
 
-const makeFakeSurveyResult = (): SurveyResultModel => ({
-  id: "valid_id",
-  date: new Date(),
-  answer: "valid_answer",
-  surveyId: "valid_survey_id",
-  accountId: "valid_account_id",
-});
-
-const makeLoadSurveyById = (): LoadSurveyById => {
-  class LoadSurveyByIdStub implements LoadSurveyById {
-    async loadById(id: string): Promise<SurveyModel> {
-      return mockSurveyModel();
-    }
-  }
-
-  return new LoadSurveyByIdStub();
-};
-
-const makeSaveSurveyResult = (): SaveSurveyResult => {
-  class SaveSurveyResultStub implements SaveSurveyResult {
-    async save(data: SaveSurveyResultParams): Promise<SurveyResultModel> {
-      return makeFakeSurveyResult();
-    }
-  }
-
-  return new SaveSurveyResultStub();
-};
-
 const makeSut = () => {
-  const loadSurveyById = makeLoadSurveyById();
-  const saveSurveyResult = makeSaveSurveyResult();
+  const loadSurveyById = mockLoadSurveyById();
+  const saveSurveyResult = mockSaveSurveyResult();
 
   const sut = new SaveSurveyResultController(loadSurveyById, saveSurveyResult);
 
@@ -80,7 +47,7 @@ describe("SaveSurveyResult Controller", () => {
 
     const loadSpy = jest.spyOn(loadSurveyById, "loadById");
 
-    await sut.handle(makeFakeRequest());
+    await sut.handle(mockRequest());
 
     expect(loadSpy).toHaveBeenCalledWith("any_survey_id");
   });
@@ -92,7 +59,7 @@ describe("SaveSurveyResult Controller", () => {
       .spyOn(loadSurveyById, "loadById")
       .mockReturnValueOnce(Promise.resolve(null));
 
-    const response = await sut.handle(makeFakeRequest());
+    const response = await sut.handle(mockRequest());
 
     expect(response).toEqual(forbidden(new InvalidParamError("surveyId")));
   });
@@ -119,7 +86,7 @@ describe("SaveSurveyResult Controller", () => {
       .spyOn(loadSurveyById, "loadById")
       .mockReturnValueOnce(Promise.reject(new Error()));
 
-    const response = await sut.handle(makeFakeRequest());
+    const response = await sut.handle(mockRequest());
 
     expect(response).toEqual(serverError(new Error()));
   });
@@ -129,7 +96,7 @@ describe("SaveSurveyResult Controller", () => {
 
     const saveSpy = jest.spyOn(saveSurveyResult, "save");
 
-    await sut.handle(makeFakeRequest());
+    await sut.handle(mockRequest());
 
     expect(saveSpy).toHaveBeenCalledWith({
       answer: "any_answer",
@@ -146,7 +113,7 @@ describe("SaveSurveyResult Controller", () => {
       .spyOn(saveSurveyResult, "save")
       .mockReturnValueOnce(Promise.reject(new Error()));
 
-    const response = await sut.handle(makeFakeRequest());
+    const response = await sut.handle(mockRequest());
 
     expect(response).toEqual(serverError(new Error()));
   });
@@ -154,8 +121,8 @@ describe("SaveSurveyResult Controller", () => {
   test("Should return 200 on success", async () => {
     const { sut } = makeSut();
 
-    const response = await sut.handle(makeFakeRequest());
+    const response = await sut.handle(mockRequest());
 
-    expect(response).toEqual(ok(makeFakeSurveyResult()));
+    expect(response).toEqual(ok(mockSurveyResultModel()));
   });
 });
