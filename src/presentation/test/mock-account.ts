@@ -4,6 +4,8 @@ import {
   Authentication,
   AuthenticationParams,
 } from "@/domain/usecases/authentication/authentication";
+import { LoadAccountByToken } from "@/domain/usecases/account/load-account-by-token";
+import { AccountModel } from "@/domain/models/account";
 
 const mockAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
@@ -25,4 +27,14 @@ const mockAuthentication = (): Authentication => {
   return new AuthenticationStub();
 };
 
-export { mockAccount, mockAuthentication };
+const mockLoadAccountByToken = () => {
+  class LoadAccountByTokenStub implements LoadAccountByToken {
+    async load(token: string): Promise<AccountModel> {
+      return mockAccountModel();
+    }
+  }
+
+  return new LoadAccountByTokenStub();
+};
+
+export { mockLoadAccountByToken, mockAccount, mockAuthentication };
