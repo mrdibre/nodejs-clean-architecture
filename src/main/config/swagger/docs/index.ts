@@ -19,6 +19,9 @@ const docs = {
     {
       name: "Auth",
     },
+    {
+      name: "Survey",
+    },
   ],
   license: {
     name: "GPL-3.0-or-later",

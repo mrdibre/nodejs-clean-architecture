@@ -31,4 +31,15 @@ const unauthorized = {
   },
 };
 
-export { badRequest, serverError, unauthorized };
+const forbidden = {
+  description: "Access Denied",
+  content: {
+    "application/json": {
+      schema: {
+        $ref: "#/schemas/error",
+      },
+    },
+  },
+};
+
+export { forbidden, badRequest, serverError, unauthorized };
