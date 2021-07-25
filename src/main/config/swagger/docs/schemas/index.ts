@@ -6,6 +6,7 @@ import {
   surveySchema,
   surveysSchema,
   surveyAnswerSchema,
+  addSurveyParamsSchema,
 } from "./survey-schema";
 
 const schemas = {
@@ -17,6 +18,7 @@ const schemas = {
   loginParams: loginParamsSchema,
   signupParams: signUpParamsSchema,
   surveyAnswer: surveyAnswerSchema,
+  addSurveyParams: addSurveyParamsSchema,
 };
 
 export { schemas };
