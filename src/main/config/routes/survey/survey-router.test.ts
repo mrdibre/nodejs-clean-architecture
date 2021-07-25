@@ -107,6 +107,7 @@ describe("Survey Routes", () => {
 
     test("Should return 204 on loadAll surveys with valid accessToken", async () => {
       const token = await makeToken();
+      await surveyCollection.deleteMany({});
 
       await request(app)
         .get("/api/survey")
