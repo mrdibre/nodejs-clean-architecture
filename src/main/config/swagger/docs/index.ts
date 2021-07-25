@@ -1,5 +1,6 @@
-import { loginPath } from "./login";
+import { paths } from "./paths";
 import { schemas } from "./schemas";
+import { components } from "./components";
 
 const docs = {
   openapi: "3.0.0",
@@ -19,10 +20,13 @@ const docs = {
       name: "Auth",
     },
   ],
-  paths: {
-    "/login": loginPath,
+  license: {
+    name: "GPL-3.0-or-later",
+    url: "https://spdx.org/licenses/GPL-3.0-or-later.html",
   },
+  paths,
   schemas,
+  components,
 };
 
 export { docs };

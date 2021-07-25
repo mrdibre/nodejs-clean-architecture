@@ -1,7 +1,9 @@
 import { accountSchema } from "./account-schema";
-import { loginParamsSchema } from "@/main/config/swagger/docs/schemas/login-params";
+import { errorSchema } from "./error-schema";
+import { loginParamsSchema } from "./login-params";
 
 const schemas = {
+  error: errorSchema,
   account: accountSchema,
   loginParams: loginParamsSchema,
 };
