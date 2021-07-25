@@ -3,6 +3,10 @@ import { accountSchema } from "./account-schema";
 import { apiKeyAuthSchema } from "./api-key-auth-schema";
 import { loginParamsSchema, signUpParamsSchema } from "./auth-params";
 import {
+  surveyResultSchema,
+  saveSurveyParamsSchema,
+} from "./survey-result-schema";
+import {
   surveySchema,
   surveysSchema,
   surveyAnswerSchema,
@@ -18,7 +22,9 @@ const schemas = {
   loginParams: loginParamsSchema,
   signupParams: signUpParamsSchema,
   surveyAnswer: surveyAnswerSchema,
+  surveyResult: surveyResultSchema,
   addSurveyParams: addSurveyParamsSchema,
+  saveSurveyParams: saveSurveyParamsSchema,
 };
 
 export { schemas };
