@@ -1,7 +1,7 @@
 import { errorSchema } from "./error-schema";
 import { accountSchema } from "./account-schema";
-import { loginParamsSchema } from "./login-params";
 import { apiKeyAuthSchema } from "./api-key-auth-schema";
+import { loginParamsSchema, signUpParamsSchema } from "./auth-params";
 import {
   surveySchema,
   surveysSchema,
@@ -15,6 +15,7 @@ const schemas = {
   account: accountSchema,
   apiKeyAuth: apiKeyAuthSchema,
   loginParams: loginParamsSchema,
+  signupParams: signUpParamsSchema,
   surveyAnswer: surveyAnswerSchema,
 };
 
